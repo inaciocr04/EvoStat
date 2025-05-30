@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'pseudo',
+        'age',
         'password',
         'gender',
         'lastname',
@@ -48,5 +49,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function workouts()
+    {
+        return $this->hasMany(Workout::class);
     }
 }
