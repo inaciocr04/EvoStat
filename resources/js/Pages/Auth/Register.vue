@@ -44,18 +44,19 @@ const submit = () => {
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <TextInput v-model="form.lastname" placeholder="Nom"/>
                     <TextInput v-model="form.firstname" placeholder="Prénom"/>
+                    <TextInput v-model="form.pseudo" placeholder="Pseudo"/>
+                </div>
+
+                <!-- Pseudo + âge -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <TextInput v-model="form.age" placeholder="Âge" type="number"/>
                     <select v-model="form.gender" class="border rounded-md px-3 py-2 w-full text-gray-700">
                         <option value="" disabled selected>Sexe</option>
                         <option value="male">Homme</option>
                         <option value="female">Femme</option>
                         <option value="other">Autre</option>
                     </select>
-                </div>
-
-                <!-- Pseudo + âge -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <TextInput v-model="form.pseudo" placeholder="Pseudo"/>
-                    <TextInput v-model="form.age" placeholder="Âge" type="number"/>
+                    <TextInput v-model="form.weight" placeholder="Poids" type="number"/>
                 </div>
 
                 <div class="flex flex-col gap-4">

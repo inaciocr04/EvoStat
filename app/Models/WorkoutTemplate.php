@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Workout extends Model
 {
@@ -11,18 +13,14 @@ class Workout extends Model
         'name',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function workoutExercises()
+    public function workoutExercises(): HasMany
     {
         return $this->hasMany(WorkoutExercise::class);
     }
 
-    public function exercises()
-    {
-        return $this->belongsToMany(Exercise::class, 'workout_exercises');
-    }
 }
