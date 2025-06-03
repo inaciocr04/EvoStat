@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workout_template_exercises', function (Blueprint $table) {
+        Schema::create('session_exercices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('workout_template_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('exercise_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('workout_session_id')->constrained()->onDelete('cascade');
+            $table->foreignId('exercise_id')->constrained()->onDelete('cascade');
             $table->integer('order');
             $table->text('notes')->nullable();
             $table->timestamps();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('workout_template_exercises');
+        Schema::dropIfExists('session_exercices');
     }
 };

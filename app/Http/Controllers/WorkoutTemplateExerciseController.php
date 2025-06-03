@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\WorkoutExercise;
-use App\Http\Requests\StoreWorkoutExerciseRequest;
+use App\Models\WorkoutTemplateExercise;
+use App\Http\Requests\StoreWorkoutTemplateExerciseRequest;
 use App\Http\Requests\UpdateWorkoutExerciseRequest;
 
-class WorkoutExerciseController extends Controller
+class WorkoutTemplateExerciseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class WorkoutExerciseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreWorkoutExerciseRequest $request)
+    public function store(StoreWorkoutTemplateExerciseRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class WorkoutExerciseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(WorkoutExercise $workoutExercise)
+    public function show(WorkoutTemplateExercise $workoutExercise)
     {
         //
     }
@@ -43,7 +43,7 @@ class WorkoutExerciseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(WorkoutExercise $workoutExercise)
+    public function edit(WorkoutTemplateExercise $workoutExercise)
     {
         //
     }
@@ -51,7 +51,7 @@ class WorkoutExerciseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkoutExerciseRequest $request, WorkoutExercise $workoutExercise)
+    public function update(UpdateWorkoutExerciseRequest $request, WorkoutTemplateExercise $workoutExercise)
     {
         //
     }
@@ -59,7 +59,7 @@ class WorkoutExerciseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WorkoutExercise $workoutExercise)
+    public function destroy(WorkoutTemplateExercise $workoutExercise)
     {
         //
     }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\WorkoutTemplate;
-use App\Http\Requests\StoreWorkoutTemplateRequest;
-use App\Http\Requests\UpdateWorkoutRequest;
+use App\Models\SessionExercice;
+use App\Http\Requests\StoreSessionExerciceRequest;
+use App\Http\Requests\UpdateSessionExerciceRequest;
 
-class WorkoutTemplateController extends Controller
+class SessionExerciceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreWorkoutTemplateRequest $request)
+    public function store(StoreSessionExerciceRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(WorkoutTemplate $workout)
+    public function show(SessionExercice $sessionExercice)
     {
         //
     }
@@ -43,7 +43,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(WorkoutTemplate $workout)
+    public function edit(SessionExercice $sessionExercice)
     {
         //
     }
@@ -51,7 +51,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkoutRequest $request, WorkoutTemplate $workout)
+    public function update(UpdateSessionExerciceRequest $request, SessionExercice $sessionExercice)
     {
         //
     }
@@ -59,7 +59,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WorkoutTemplate $workout)
+    public function destroy(SessionExercice $sessionExercice)
     {
         //
     }

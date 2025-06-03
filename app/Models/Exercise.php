@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Exercise extends Model
 {
-    public function workoutExercises()
+    public function workoutExercises(): HasMany
     {
-        return $this->hasMany(WorkoutExercise::class);
+        return $this->hasMany(WorkoutTemplateExercise::class);
     }
 
-    public function workouts()
+    public function mucleTargets(): BelongsToMany
     {
-        return $this->belongsToMany(Workout::class, 'workout_exercises');
+        return $this->belongsToMany(MuscleTarget::class, 'exercise_muscle_target');
     }
 }

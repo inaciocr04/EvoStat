@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\WorkoutTemplate;
-use App\Http\Requests\StoreWorkoutTemplateRequest;
-use App\Http\Requests\UpdateWorkoutRequest;
+use App\Models\MuscleTarget;
+use App\Http\Requests\StoreMuscleTargetRequest;
+use App\Http\Requests\UpdateMuscleTargetRequest;
 
-class WorkoutTemplateController extends Controller
+class MuscleTargetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreWorkoutTemplateRequest $request)
+    public function store(StoreMuscleTargetRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(WorkoutTemplate $workout)
+    public function show(MuscleTarget $muscleTarget)
     {
         //
     }
@@ -43,7 +43,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(WorkoutTemplate $workout)
+    public function edit(MuscleTarget $muscleTarget)
     {
         //
     }
@@ -51,7 +51,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkoutRequest $request, WorkoutTemplate $workout)
+    public function update(UpdateMuscleTargetRequest $request, MuscleTarget $muscleTarget)
     {
         //
     }
@@ -59,7 +59,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WorkoutTemplate $workout)
+    public function destroy(MuscleTarget $muscleTarget)
     {
         //
     }
