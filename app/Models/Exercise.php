@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Exercise extends Model
 {
+
+    protected $fillable = [
+        'name',
+        'description',
+    ];
     public function workoutExercises(): HasMany
     {
         return $this->hasMany(WorkoutTemplateExercise::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateExerciseRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateExerciseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,13 @@ class UpdateExerciseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('exercises', 'name')->ignore($this->exercise->id),
+            ],
+            'description' => 'nullable|string',
         ];
     }
 }

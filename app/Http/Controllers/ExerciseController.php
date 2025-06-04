@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Exercise;
 use App\Http\Requests\StoreExerciseRequest;
 use App\Http\Requests\UpdateExerciseRequest;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class ExerciseController extends Controller
 {
@@ -13,7 +15,9 @@ class ExerciseController extends Controller
      */
     public function index()
     {
-        //
+        $exercises = Exercise::all();
+
+        return Inertia::render('Exercises/index', compact('exercises'));
     }
 
     /**
@@ -21,7 +25,7 @@ class ExerciseController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Exercises/create');
     }
 
     /**
@@ -29,7 +33,12 @@ class ExerciseController extends Controller
      */
     public function store(StoreExerciseRequest $request)
     {
-        //
+        $data = $request->validated();
+        $exercise = new Exercise();
+        $exercise->fill($data);
+        $exercise->save();
+
+        return Redirect::route('exercises.index');
     }
 
     /**
@@ -45,7 +54,7 @@ class ExerciseController extends Controller
      */
     public function edit(Exercise $exercise)
     {
-        //
+        return Inertia::render('Exercises/edit', compact('exercise'));
     }
 
     /**
@@ -53,7 +62,11 @@ class ExerciseController extends Controller
      */
     public function update(UpdateExerciseRequest $request, Exercise $exercise)
     {
-        //
+        $data = $request->validated();
+        $exercise->fill($data);
+        $exercise->save();
+
+        return Redirect::route('exercises.index');
     }
 
     /**
@@ -61,6 +74,8 @@ class ExerciseController extends Controller
      */
     public function destroy(Exercise $exercise)
     {
-        //
+        $exercise->delete();
+
+        return Redirect::route('exercises.index');
     }
 }
