@@ -1,5 +1,6 @@
 <script setup>
 import {Head, Link} from '@inertiajs/vue3';
+import WavingHand from "@/Components/WavingHand.vue";
 
 defineProps({
     canLogin: {
@@ -165,8 +166,11 @@ function handleImageError() {
                 </div>
             </div>
         </div>
-        <div class="bg-evogray px-24 py-14 text-white font-bold space-y-20">
-            <h3 class="text-4xl">Hey, bienvenue sur EvoStat !</h3>
+        <div class="bg-evogray px-24 py-14 text-white font-bold space-y-10">
+            <div class="flex items-center gap-6">
+                <WavingHand />
+                <h3 class="text-4xl">Hey, bienvenue sur EvoStat !</h3>
+            </div>
             <div class="text-2xl space-y-8">
                 <p>Déjà, merci d’être là. Si tu lis ça, c’est que t’es à deux clics de rejoindre l’aventure. En
                     t’inscrivant, tu découvres la toute première version d’EvoStat. Alors oui, tout n’est pas encore

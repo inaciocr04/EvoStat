@@ -12,6 +12,7 @@ const form = useForm({
     gender: '',
     pseudo: '',
     age: '',
+    weight: '',
     email: '',
     password: '',
     password_confirmation: '',

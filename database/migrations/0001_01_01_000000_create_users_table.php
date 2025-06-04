@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('pseudo', 50)->unique();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->integer('age')->nullable();
-            $table->integer('weight')->nullable();
+            $table->integer('weight');
             $table->string('email')->unique()->index();
+            $table->string('role')->default('user');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
