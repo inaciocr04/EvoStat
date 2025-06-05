@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class MuscleTarget extends Model
 {
+
+    protected $fillable = [
+        'name',
+    ];
     public function exercises()
     {
-        return $this->belongsToMany(Exercise::class, 'exercise_muscle_target');
+        return $this->belongsToMany(Exercise::class);
     }
 }

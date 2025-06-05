@@ -4,7 +4,8 @@ import DefaultLayout from '@/Layouts/DefaultLayout.vue'
 import { Link, router } from '@inertiajs/vue3'
 
 defineProps({
-    exercises: Array
+    exercises: Array,
+    muscleTargets: Array
 })
 
 // Fonction pour supprimer un exercice
@@ -25,6 +26,12 @@ function deleteExercise(id) {
             >
                 + Nouvel exercice
             </Link>
+            <Link
+                :href="route('muscleTargets.index')"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            >
+                Liste des muscles
+            </Link>
         </div>
 
         <div
@@ -34,6 +41,20 @@ function deleteExercise(id) {
         >
             <h2 class="text-xl font-semibold">{{ exercise.name }}</h2>
             <p class="text-gray-700">{{ exercise.description || 'Aucune description' }}</p>
+            <div v-if="exercise.muscle_targets?.length">
+                <p class="mt-2 font-semibold">Muscles ciblés :</p>
+                <ul class="list-disc list-inside">
+                    <li
+                        v-for="muscle in exercise.muscle_targets"
+                        :key="muscle.id"
+                    >
+                        {{ muscle.name }}
+                    </li>
+                </ul>
+            </div>
+            <div v-else>
+                <p class="italic text-gray-500">Aucun muscle ciblé</p>
+            </div>
 
             <div class="mt-4 flex space-x-2">
                 <Link

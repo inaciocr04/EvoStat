@@ -24,6 +24,8 @@ class StoreExerciseRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'muscle_targets' => 'array',
+            'muscle_targets.*' => 'exists:muscle_targets,id',
         ];
     }
 }

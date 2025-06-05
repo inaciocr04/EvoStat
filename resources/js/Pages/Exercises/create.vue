@@ -3,13 +3,14 @@ import { useForm } from '@inertiajs/vue3'
 import { defineProps } from 'vue'
 
 const props = defineProps({
-    categories: Array
+    muscleTargets: Array,
 })
 
 const form = useForm({
     name: '',
     description: '',
-    category_id: '',
+    muscle_targets: props.exercise?.muscleTargets?.map(m => m.id) ?? []
+
 })
 
 function submit() {
@@ -41,6 +42,25 @@ function submit() {
                     class="w-full border px-4 py-2 rounded"
                 ></textarea>
                 <p v-if="form.errors.description" class="text-red-500 text-sm">{{ form.errors.description }}</p>
+            </div>
+            <div class="mb-4">
+                <label>Muscles ciblés</label>
+                <select
+                    v-model="form.muscle_targets"
+                    multiple
+                    class="border rounded-md px-3 py-2 w-full text-gray-700"
+                >
+                    <option
+                        v-for="muscleTarget in muscleTargets"
+                        :key="muscleTarget.id"
+                        :value="muscleTarget.id"
+                    >
+                        {{ muscleTarget.name }}
+                    </option>
+                </select>
+                <p v-if="form.errors.muscle_targets" class="text-red-500 text-sm">
+                    {{ form.errors.muscle_targets }}
+                </p>
             </div>
 
             <button

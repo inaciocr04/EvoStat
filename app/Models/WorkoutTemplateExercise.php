@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class WorkoutTemplateExercise extends Model
 {
     protected $fillable = [
-        'workout_id',
+        'workout_template_id',
         'exercise_id',
         'order',
         'notes',
     ];
 
-    public function workout()
+    public function workoutTemplate()
     {
         return $this->belongsTo(WorkoutTemplate::class);
     }
@@ -23,8 +23,4 @@ class WorkoutTemplateExercise extends Model
         return $this->belongsTo(Exercise::class);
     }
 
-    public function sets()
-    {
-        return $this->hasMany(Set::class);
-    }
 }
