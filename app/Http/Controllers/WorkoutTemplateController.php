@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exercise;
 use App\Models\WorkoutTemplate;
 use App\Http\Requests\StoreWorkoutTemplateRequest;
 use App\Http\Requests\UpdateWorkoutRequest;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class WorkoutTemplateController extends Controller
 {
@@ -13,15 +16,20 @@ class WorkoutTemplateController extends Controller
      */
     public function index()
     {
-        //
+        $workoutTemplates = WorkoutTemplate::with('workoutTemplateExercises.exercise')->where('user_id', auth()->id())->get();
+        $exercises = Exercise::all();
+
+        return Inertia::render('WorkoutTemplates/index', compact('workoutTemplates', 'exercises'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): \Inertia\Response
     {
-        //
+        $exercises = Exercise::all();
+
+        return Inertia::render('WorkoutTemplates/create', compact('exercises'));
     }
 
     /**
@@ -29,7 +37,21 @@ class WorkoutTemplateController extends Controller
      */
     public function store(StoreWorkoutTemplateRequest $request)
     {
-        //
+        $data = $request->validated();
+        $workoutTemplate = WorkoutTemplate::create([
+            'name' => $data['name'],
+            'user_id' => auth()->id(),
+        ]);
+
+        foreach ($data['exercises'] as $exercise) {
+            $workoutTemplate->workoutTemplateExercises()->create([
+                'exercise_id' => $exercise['exercise_id'],
+                'order' => $exercise['order'],
+                'notes' => $exercise['notes'] ?? null,
+            ]);
+        }
+
+        return Redirect::route('workout-templates.index')->with('success', 'Template créé.');
     }
 
     /**
@@ -61,6 +83,8 @@ class WorkoutTemplateController extends Controller
      */
     public function destroy(WorkoutTemplate $workout)
     {
-        //
+        $workout->delete();
+
+        return Redirect::route('workout-templates.index')->with('success', 'Template supprimer.');
     }
 }

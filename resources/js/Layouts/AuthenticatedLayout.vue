@@ -20,7 +20,7 @@ const showingNavigationDropdown = ref(false);
                     <div class="flex justify-between items-center px-14 py-8">
                         <!-- Logo -->
                         <div class="flex shrink-0 items-center">
-                            <Link :href="route('dashboard')" class="flex items-center gap-4">
+                            <Link :href="route('profils')" class="flex items-center gap-4">
                                 <ApplicationLogoNav
                                     class="block h-9 w-auto fill-current text-gray-800"
                                 />
@@ -45,8 +45,8 @@ const showingNavigationDropdown = ref(false);
                                 class="h-min"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('workouts')"
+                                    :href="route('workout-templates.index')"
+                                    :active="route().current('workout-templates.index')"
                                 >
                                     Séances
                                 </NavLink>
@@ -55,7 +55,7 @@ const showingNavigationDropdown = ref(false);
                                 class="h-min"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
+                                    :href="route('profils')"
                                     :active="route().current('stats')"
                                 >
                                     Statistiques
@@ -65,8 +65,8 @@ const showingNavigationDropdown = ref(false);
                                 class="h-min"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="route('profils')"
+                                    :active="route().current('profils')"
                                 >
                                     Profils
                                 </NavLink>
@@ -172,10 +172,10 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
+                            :href="route('profils')"
+                            :active="route().current('profils')"
                         >
-                            Dashboard
+                            Profils
                         </ResponsiveNavLink>
                     </div>
 

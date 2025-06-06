@@ -40,8 +40,8 @@ import NavLink from "@/Components/NavLink.vue";
                 class="h-min"
             >
                 <NavLink
-                    :href="route('dashboard')"
-                    :active="route().current('exercises')"
+                    :href="route('exercises.index')"
+                    :active="route().current('exercises.*')"
                 >
                     Exercices
                 </NavLink>
@@ -50,7 +50,7 @@ import NavLink from "@/Components/NavLink.vue";
                 class="h-min"
             >
                 <NavLink
-                    :href="route('dashboard')"
+                    :href="route('profils')"
                     :active="route().current('workouts')"
                 >
                     Séances
@@ -60,7 +60,7 @@ import NavLink from "@/Components/NavLink.vue";
                 class="h-min"
             >
                 <NavLink
-                    :href="route('dashboard')"
+                    :href="route('profils')"
                     :active="route().current('stats')"
                 >
                     Statistiques
@@ -70,8 +70,8 @@ import NavLink from "@/Components/NavLink.vue";
                 class="h-min"
             >
                 <NavLink
-                    :href="route('dashboard')"
-                    :active="route().current('dashboard')"
+                    :href="route('profils')"
+                    :active="route().current('profils')"
                 >
                     Profils
                 </NavLink>

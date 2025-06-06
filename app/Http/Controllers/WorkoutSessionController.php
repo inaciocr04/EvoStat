@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\WorkoutSession;
 use App\Http\Requests\StoreWorkoutSessionRequest;
 use App\Http\Requests\UpdateWorkoutSessionRequest;
+use App\Models\WorkoutTemplate;
 
 class WorkoutSessionController extends Controller
 {
@@ -32,6 +33,24 @@ class WorkoutSessionController extends Controller
         //
     }
 
+//    public function startFromTemplate(WorkoutTemplate $template)
+//    {
+//        $session = WorkoutSession::create([
+//            'user_id' => auth()->id(),
+//            'workout_template_id' => $template->id,
+//            'started_at' => now(),
+//        ]);
+//
+//        foreach ($template->workoutTemplateExercises as $templateExercise) {
+//            $session->sessionExercises()->create([
+//                'exercise_id' => $templateExercise->exercise_id,
+//                'order' => $templateExercise->order,
+//                'notes' => $templateExercise->notes,
+//            ]);
+//        }
+//
+//        return redirect()->route('sessions.show', $session);
+//    }
     /**
      * Display the specified resource.
      */

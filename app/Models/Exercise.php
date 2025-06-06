@@ -18,8 +18,8 @@ class Exercise extends Model
         return $this->hasMany(WorkoutTemplateExercise::class);
     }
 
-    public function mucleTargets(): BelongsToMany
+    public function muscleTargets(): BelongsToMany
     {
-        return $this->belongsToMany(MuscleTarget::class, 'exercise_muscle_target');
+        return $this->belongsToMany(MuscleTarget::class);
     }
 }

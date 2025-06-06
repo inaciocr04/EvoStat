@@ -11,7 +11,7 @@ class StoreWorkoutTemplateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreWorkoutTemplateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
+            'exercises' => 'required|array|min:1',
+            'exercises.*.exercise_id' => 'required|exists:exercises,id',
+            'exercises.*.order' => 'required|integer|min:0',
+            'exercises.*.notes' => 'nullable|string',
         ];
     }
 }
