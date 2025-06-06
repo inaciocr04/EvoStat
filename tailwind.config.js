@@ -24,12 +24,14 @@ export default {
             backgroundImage: {
                 evogradientright: "linear-gradient(to right, #3690DE, #32D8A0)",
                 evogradientleft: "linear-gradient(to left, #3690DE, #32D8A0)",
+                evogradientgrayleft: "linear-gradient(to left, #384D53, #FFFFFF)",
             },
             boxShadow: {
                 'evoShadow': '0px 0px 24.1px 1px rgba(0, 0, 0, 0.25)',
             },
             borderRadius: {
-                mainRounded: '30px'
+                mainRounded: '30px',
+                secondaryRounded: '20px',
             }
         },
     },
