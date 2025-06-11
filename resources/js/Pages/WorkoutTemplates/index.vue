@@ -1,9 +1,11 @@
 <script setup>
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
-defineOptions({ layout: DefaultLayout })
 
-import { ref } from 'vue'
-import {router, useForm} from '@inertiajs/vue3'
+defineOptions({layout: DefaultLayout})
+
+import {ref} from 'vue'
+import {router, useForm, Link} from '@inertiajs/vue3'
+
 import Draggable from 'vuedraggable'
 
 const props = defineProps({
@@ -72,17 +74,27 @@ function submit() {
             <div v-for="template in workoutTemplates" :key="template.id" class="mb-4 border p-4 rounded shadow">
                 <div class="flex justify-between items-center">
                     <h2 class="text-xl font-semibold">{{ template.name }}</h2>
-                    <button
-                        @click="deleteTemplate(template.id)"
-                        class="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
-                    >
-                        Supprimer
-                    </button>
+                    <div class="space-x-4">
+                        <Link
+                            :href="route('workout-templates.edit', template.id)"
+                            class="text-white bg-yellow-500 hover:bg-yellow-600 px-3 py-1 rounded text-sm"
+                        >
+                            Modifier
+                        </Link>
+                        <button
+                            @click="deleteTemplate(template.id)"
+                            class="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
+                        >
+                            Supprimer
+                        </button>
+                    </div>
                 </div>
 
                 <ul class="list-disc list-inside mt-2">
                     <li v-for="ex in template.workout_template_exercises" :key="ex.id">
-                        {{ ex.order }}. {{ ex.exercise.name }} <span class="italic text-gray-600">- {{ ex.notes }}</span>
+                        {{ ex.order }}. {{ ex.exercise.name }} <span class="italic text-gray-600">- {{
+                            ex.notes
+                        }}</span>
                     </li>
                 </ul>
             </div>
@@ -96,7 +108,9 @@ function submit() {
         <Teleport to="body">
             <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
                 <div class="bg-white rounded shadow-lg max-w-xl w-full p-6 relative z-50">
-                    <button @click="showModal = false" class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">✕</button>
+                    <button @click="showModal = false"
+                            class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">✕
+                    </button>
 
                     <h2 class="text-xl font-bold mb-4">Créer un Template</h2>
 
@@ -104,7 +118,7 @@ function submit() {
                         <!-- Nom -->
                         <div class="mb-4">
                             <label class="block mb-1 font-semibold">Nom du template</label>
-                            <input v-model="form.name" class="border px-2 py-1 rounded w-full" />
+                            <input v-model="form.name" class="border px-2 py-1 rounded w-full"/>
                             <p v-if="form.errors.name" class="text-red-500 text-sm">{{ form.errors.name }}</p>
                         </div>
 
@@ -124,7 +138,8 @@ function submit() {
                                 <div class="grid grid-cols-12 gap-2 items-center border p-2 rounded bg-white shadow-sm">
 
                                     <!-- Poignée de drag -->
-                                    <div class="drag-handle cursor-move col-span-1 flex justify-center items-center text-gray-400">
+                                    <div
+                                        class="drag-handle cursor-move col-span-1 flex justify-center items-center text-gray-400">
                                         <!-- Icône draggable (≡) -->
                                         <span class="text-xl">≡</span>
                                     </div>
@@ -133,25 +148,32 @@ function submit() {
                                     <div class="col-span-4">
                                         <select v-model="element.exercise_id" class="w-full border rounded px-2 py-1">
                                             <option disabled value="">Choisir un exercice</option>
-                                            <option v-for="ex in exercises" :key="ex.id" :value="ex.id">{{ ex.name }}</option>
+                                            <option v-for="ex in exercises" :key="ex.id" :value="ex.id">{{
+                                                    ex.name
+                                                }}
+                                            </option>
                                         </select>
                                     </div>
 
                                     <!-- Notes -->
                                     <div class="col-span-5">
-                                        <input v-model="element.notes" placeholder="Notes" class="w-full border rounded px-2 py-1" />
+                                        <input v-model="element.notes" placeholder="Notes"
+                                               class="w-full border rounded px-2 py-1"/>
                                     </div>
 
                                     <!-- Supprimer -->
                                     <div class="col-span-2 text-right">
-                                        <button @click="removeExercise(index)" type="button" class="text-red-600 hover:text-red-800">Supprimer</button>
+                                        <button @click="removeExercise(index)" type="button"
+                                                class="text-red-600 hover:text-red-800">Supprimer
+                                        </button>
                                     </div>
                                 </div>
                             </template>
                         </Draggable>
 
 
-                        <button type="button" @click="addExercise" class="bg-blue-500 text-white px-2 py-1 rounded my-4">
+                        <button type="button" @click="addExercise"
+                                class="bg-blue-500 text-white px-2 py-1 rounded my-4">
                             Ajouter un exercice
                         </button>
 

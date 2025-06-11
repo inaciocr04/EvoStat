@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Exercise;
 use App\Models\WorkoutTemplate;
 use App\Http\Requests\StoreWorkoutTemplateRequest;
-use App\Http\Requests\UpdateWorkoutRequest;
+use App\Http\Requests\UpdateWorkoutTemplateRequest;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -16,11 +16,18 @@ class WorkoutTemplateController extends Controller
      */
     public function index()
     {
-        $workoutTemplates = WorkoutTemplate::with('workoutTemplateExercises.exercise')->where('user_id', auth()->id())->get();
+        // Récupérer les templates de séance avec les exercices triés par ordre
+        $workoutTemplates = WorkoutTemplate::with(['workoutTemplateExercises' => function($query) {
+            $query->orderBy('order'); // Trier les exercices par ordre
+        }, 'workoutTemplateExercises.exercise'])
+            ->where('user_id', auth()->id())
+            ->get();
+
         $exercises = Exercise::all();
 
         return Inertia::render('WorkoutTemplates/index', compact('workoutTemplates', 'exercises'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -57,7 +64,7 @@ class WorkoutTemplateController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(WorkoutTemplate $workout)
+    public function show(WorkoutTemplate $workoutTemplate)
     {
         //
     }
@@ -65,25 +72,58 @@ class WorkoutTemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(WorkoutTemplate $workout)
+    public function edit(WorkoutTemplate $workoutTemplate)
     {
-        //
-    }
+        $exercises = Exercise::all();
+
+        $workoutTemplate->load('workoutTemplateExercises.exercise');
+
+        $workoutTemplate->exercises = $workoutTemplate->workoutTemplateExercises->map(function($wte) {
+            return [
+                'id' => $wte->id,
+                'exercise_id' => $wte->exercise_id,
+                'order' => $wte->order,
+                'notes' => $wte->notes,
+                'name' => $wte->exercise->name ?? 'Exercice inconnu',
+            ];
+        });
+
+
+        return Inertia::render('WorkoutTemplates/edit', compact('workoutTemplate', 'exercises'));    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateWorkoutRequest $request, WorkoutTemplate $workout)
+    public function update(UpdateWorkoutTemplateRequest $request, WorkoutTemplate $workoutTemplate)
     {
-        //
+        $data = $request->validated();
+
+        $workoutTemplate->update([
+            'name' => $data['name'],
+            'user_id' => auth()->id(),
+        ]);
+
+        foreach ($data['exercises'] as $exercise) {
+            $workoutTemplate->workoutTemplateExercises()->updateOrCreate(
+                ['exercise_id' => $exercise['exercise_id']],
+                [
+                    'order' => $exercise['order'],
+                    'notes' => $exercise['notes'] ?? null,
+                ]
+            );
+        }
+
+        return Redirect::route('workout-templates.index')->with('success', 'Template modifié.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WorkoutTemplate $workout)
+    public function destroy(WorkoutTemplate $workout_template)
     {
-        $workout->delete();
+        $workout_template->workoutTemplateExercises()->delete();
+
+        $workout_template->delete();
 
         return Redirect::route('workout-templates.index')->with('success', 'Template supprimer.');
     }

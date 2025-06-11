@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateWorkoutRequest extends FormRequest
+class UpdateWorkoutTemplateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateWorkoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'nullable|string|max:255',
+            'exercises' => 'nullable|array|min:1',
+            'exercises.*.exercise_id' => 'required|exists:exercises,id',
+            'exercises.*.order' => 'required|integer|min:0',
+            'exercises.*.notes' => 'nullable|string',
         ];
     }
 }

@@ -1,6 +1,7 @@
 <script setup>
 import {Head, Link} from '@inertiajs/vue3';
 import WavingHand from "@/Components/WavingHand.vue";
+import FooterBar from "@/Components/FooterBar.vue";
 
 defineProps({
     canLogin: {
@@ -168,23 +169,28 @@ function handleImageError() {
         </div>
         <div class="bg-evogray px-24 py-14 text-white font-bold space-y-10">
             <div class="flex items-center gap-6">
-                <WavingHand />
+                <WavingHand/>
                 <h3 class="text-4xl">Hey, bienvenue sur EvoStat !</h3>
             </div>
-            <div class="text-2xl space-y-8">
-                <p>Déjà, merci d’être là. Si tu lis ça, c’est que t’es à deux clics de rejoindre l’aventure. En
+            <div class="text-2xl space-y-8 pr-44">
+                <p>
+                    Déjà, merci d’être là. Si tu lis ça, c’est que t’es à deux clics de rejoindre l’aventure. En
                     t’inscrivant, tu découvres la toute première version d’EvoStat. Alors oui, tout n’est pas encore
                     parfait, mais c’est normal : on démarre, on teste, on avance. Et surtout, on évolue avec toi.
                 </p>
-                <p>On prévoit plein de mises à jour, des améliorations non-stop, et ton avis compte à fond. Dis-nous ce
+                <p>
+                    On prévoit plein de mises à jour, des améliorations non-stop, et ton avis compte à fond. Dis-nous ce
                     qui te plaît (ou pas), et on s’en occupe.
                     Notre mission ? Rendre tes séances de sport plus simples, plus claires, plus motivantes.
                 </p>
-                <p>Tout est dispo sur le web, et si ça cartonne, une app mobile verra peut-être le jour 👀
+                <p>
+                    Tout est dispo sur le web, et si ça cartonne, une app mobile verra peut-être le jour 👀
                     Encore un grand merci à toi, futur utilisateur d’EvoStat.
                 </p>
                 <p>Evoluons -- ensemble</p>
+
             </div>
         </div>
     </main>
+    <FooterBar/>
 </template>

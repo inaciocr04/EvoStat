@@ -9,7 +9,6 @@ const props = defineProps({
 const form = useForm({
     name: '',
     exercises: [
-        // { exercise_id: null, order: 1, notes: '' }
     ]
 })
 

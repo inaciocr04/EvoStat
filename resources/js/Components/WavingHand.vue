@@ -1,6 +1,6 @@
 <template>
-    <div ref="hand" class="text-6xl w-fit origin-bottom-right">
-        👋
+    <div ref="hand" class="origin-bottom-right">
+        <img class="w-28 " src="/img/evomain.png" alt="">
     </div>
 </template>
 
