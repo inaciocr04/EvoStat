@@ -11,7 +11,7 @@ class UpdateWorkoutSessionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class UpdateWorkoutSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => 'required|string|in:draft,in_progress,completed',
         ];
     }
 }

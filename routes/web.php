@@ -44,6 +44,10 @@ Route::middleware('auth')->group(function () {
         ->name('sessions.inprogress');
     Route::post('/workout-sessions/from-template', [WorkoutSessionController::class, 'createSessionFromTemplate']);
     Route::post('/sets/save', [SetController::class, 'saveSets']);
+    Route::post('/sessions/{session}/exercises/{session_exercise}/sets', [SetController::class, 'store'])
+        ->name('session.sets.store');
+
+    Route::resource('sessions', WorkoutSessionController::class);
 
 
 });

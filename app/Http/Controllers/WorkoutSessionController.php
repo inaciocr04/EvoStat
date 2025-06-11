@@ -125,15 +125,13 @@ class WorkoutSessionController extends Controller
         return response()->json($workoutSession->load('sessionExercises.exercise'));
     }
 
-    public function update(UpdateWorkoutSessionRequest $request, WorkoutSession $workoutSession)
+    public function update(UpdateWorkoutSessionRequest $request, $id)
     {
-        $validated = $request->validated();
-        $workoutSession->update($validated);
+        $session = WorkoutSession::findOrFail($id);
 
-        return response()->json([
-            'message' => 'Séance mise à jour',
-            'session' => $workoutSession,
-        ]);
+        $session->update($request->all());
+
+        return response()->json(['message' => 'Session mise à jour avec succès']);
     }
 
     public function destroy(WorkoutSession $workoutSession)

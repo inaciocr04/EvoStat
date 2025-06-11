@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SessionExercise;
 use App\Models\Set;
 use App\Http\Requests\StoreSetRequest;
 use App\Http\Requests\UpdateSetRequest;
@@ -64,10 +65,18 @@ class SetController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSetRequest $request)
+    public function store(StoreSetRequest $request, SessionExercise $sessionExercise)
     {
-        //
+        $set = $sessionExercise->sets()->create([
+            'reps' => $request->reps ?? 8,
+            'weight' => $request->weight ?? 0,
+            'rest_time' => $request->rest_time ?? 60,
+            'done' => $request->done ?? false,
+        ]);
+
+        return response()->json(['id' => $set->id]);
     }
+
 
     /**
      * Display the specified resource.

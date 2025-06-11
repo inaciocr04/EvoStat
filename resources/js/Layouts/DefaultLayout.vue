@@ -1,6 +1,6 @@
 <template>
     <AuthenticatedLayout/>
-    <main class="min-h-screen px-32">
+    <main class="px-32">
         <slot/>
     </main>
     <FooterBar />
