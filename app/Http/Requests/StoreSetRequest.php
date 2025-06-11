@@ -11,7 +11,7 @@ class StoreSetRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreSetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'sets' => ['required', 'array', 'min:1'],
+            'sets.*.id' => ['nullable', 'numeric', 'exists:sets,id'],
+            'sets.*.session_exercise_id' => ['required', 'exists:session_exercises,id'],
+            'sets.*.reps' => ['required', 'integer', 'min:1'],
+            'sets.*.weight' => ['nullable', 'numeric', 'min:0'],
+            'sets.*.rest_time' => ['nullable', 'integer', 'min:0'],
         ];
     }
 }

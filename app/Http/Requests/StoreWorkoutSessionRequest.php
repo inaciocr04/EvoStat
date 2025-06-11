@@ -11,7 +11,7 @@ class StoreWorkoutSessionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class StoreWorkoutSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'template_id' => 'required|exists:workout_templates,id',
         ];
     }
 }

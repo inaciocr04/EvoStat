@@ -18,8 +18,20 @@ class Exercise extends Model
         return $this->hasMany(WorkoutTemplateExercise::class);
     }
 
+    public function workoutTemplates()
+    {
+        return $this->belongsToMany(WorkoutTemplate::class, 'workout_template_exercises')
+            ->withPivot('order', 'notes')
+            ->withTimestamps();
+    }
+
     public function muscleTargets(): BelongsToMany
     {
         return $this->belongsToMany(MuscleTarget::class);
+    }
+
+    public function sets()
+    {
+        return $this->hasMany(Set::class);
     }
 }

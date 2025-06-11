@@ -23,4 +23,11 @@ class WorkoutTemplate extends Model
         return $this->hasMany(WorkoutTemplateExercise::class);
     }
 
+    public function exercises()
+    {
+        return $this->belongsToMany(Exercise::class, 'workout_template_exercises')
+            ->withPivot('order', 'notes')
+            ->withTimestamps();
+    }
+
 }

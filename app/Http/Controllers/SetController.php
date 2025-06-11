@@ -5,9 +5,46 @@ namespace App\Http\Controllers;
 use App\Models\Set;
 use App\Http\Requests\StoreSetRequest;
 use App\Http\Requests\UpdateSetRequest;
+use Illuminate\Support\Facades\Log;
 
 class SetController extends Controller
 {
+    public function saveSets(StoreSetRequest $request)
+    {
+        $data = $request->validated();
+
+        if (!isset($data['sets'])) {
+            return response()->json(['error' => 'Le champ "sets" est manquant.'], 422);
+        }
+
+        $newSetIds = [];
+
+        foreach ($data['sets'] as $setData) {
+            if (!empty($setData['id'])) {
+                Set::where('id', $setData['id'])->update([
+                    'reps' => $setData['reps'],
+                    'weight' => $setData['weight'],
+                    'rest_time' => $setData['rest_time'],
+//                    'done' => $setData['done'] ?? false,
+                ]);
+            } else {
+                $newSet = Set::create([
+                    'session_exercise_id' => $setData['session_exercise_id'],
+                    'reps' => $setData['reps'],
+                    'weight' => $setData['weight'],
+                    'rest_time' => $setData['rest_time'],
+//                    'done' => $setData['done'] ?? false,
+                ]);
+                $newSetIds[] = $newSet->id;
+            }
+        }
+
+        return response()->json([
+            'message' => 'Sets saved successfully',
+            'new_set_ids' => $newSetIds,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */

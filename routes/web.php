@@ -3,6 +3,7 @@
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\MuscleTargetController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SetController;
 use App\Http\Controllers\WorkoutSessionController;
 use App\Http\Controllers\WorkoutTemplateController;
 use Illuminate\Foundation\Application;
@@ -31,10 +32,21 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::resource('exercises', ExerciseController::class);
     Route::resource('muscleTargets', MuscleTargetController::class);
+    Route::resource('workout-templates', WorkoutTemplateController::class);
     Route::post('/workout-templates/{template}/start', [WorkoutSessionController::class, 'startFromTemplate'])
         ->name('workout_templates.start');
+
+    Route::post('/sessions/create-from-template', [WorkoutSessionController::class, 'createSessionFromTemplate']);
+    Route::get('/sessions/{id}', [WorkoutSessionController::class, 'getSessionWithExercises']);
+    Route::post('/sessions/{id}/sets', [WorkoutSessionController::class, 'saveSets']);
+    Route::post('/sessions/{id}/start', [WorkoutSessionController::class, 'startSession']);
+    Route::get('/sessions/inprogress/{session}', [WorkoutSessionController::class, 'showInProgress'])
+        ->name('sessions.inprogress');
+    Route::post('/workout-sessions/from-template', [WorkoutSessionController::class, 'createSessionFromTemplate']);
+    Route::post('/sets/save', [SetController::class, 'saveSets']);
+
+
 });
-Route::resource('workout-templates', WorkoutTemplateController::class);
 
 
 require __DIR__.'/auth.php';

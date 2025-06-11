@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SessionExercice;
+use App\Models\SessionExercise;
 use App\Http\Requests\StoreSessionExerciceRequest;
 use App\Http\Requests\UpdateSessionExerciceRequest;
 
@@ -35,7 +35,7 @@ class SessionExerciceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SessionExercice $sessionExercice)
+    public function show(SessionExercise $sessionExercice)
     {
         //
     }
@@ -43,7 +43,7 @@ class SessionExerciceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SessionExercice $sessionExercice)
+    public function edit(SessionExercise $sessionExercice)
     {
         //
     }
@@ -51,7 +51,7 @@ class SessionExerciceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSessionExerciceRequest $request, SessionExercice $sessionExercice)
+    public function update(UpdateSessionExerciceRequest $request, SessionExercise $sessionExercice)
     {
         //
     }
@@ -59,7 +59,7 @@ class SessionExerciceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SessionExercice $sessionExercice)
+    public function destroy(SessionExercise $sessionExercice)
     {
         //
     }

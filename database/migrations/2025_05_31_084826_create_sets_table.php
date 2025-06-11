@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('session_exercise_id')->constrained()->cascadeOnDelete();
+                $table->foreignId('session_exercise_id')->constrained()->cascadeOnDelete();
             $table->decimal('weight', 5,2)->nullable();
             $table->integer('reps');
             $table->integer('rest_time');
