@@ -77,6 +77,10 @@ async function go() {
             sets: payload,
         });
 
+        await axios.patch(`/sessions/${props.session.id}`, {
+            status: 'in_progress',
+        })
+
         // Démarre la session
         await axios.post(`/sessions/${props.session.id}/start`, {
             template_id: selectedTemplateId.value,

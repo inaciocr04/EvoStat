@@ -17,3 +17,11 @@
 .border-evorgradient {
     border-color: linear-gradient(to right, #3690DE, #32D8A0);
 }
+
+.scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}

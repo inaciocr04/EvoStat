@@ -222,7 +222,7 @@ async function onFinishClick() {
 
         alert('Séance enregistrée avec succès !')
 
-        router.visit('/profils')
+        router.visit(route('workout-templates.index'))
 
     } catch (error) {
         if (error.response) {

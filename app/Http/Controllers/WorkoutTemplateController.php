@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exercise;
+use App\Models\WorkoutSession;
 use App\Models\WorkoutTemplate;
 use App\Http\Requests\StoreWorkoutTemplateRequest;
 use App\Http\Requests\UpdateWorkoutTemplateRequest;
@@ -24,8 +25,12 @@ class WorkoutTemplateController extends Controller
             ->get();
 
         $exercises = Exercise::all();
+        $workoutCompleted = WorkoutSession::with('workoutTemplate', 'sessionExercises.exercise', 'sessionExercises.sets')->where('user_id', auth()->id())->where('status', 'completed')->get();
+        $workoutDraft = WorkoutSession::with('workoutTemplate', 'sessionExercises.exercise', 'sessionExercises.sets')->where('user_id', auth()->id())->where('status', 'draft')->get();
+        $workoutInProgress = WorkoutSession::with('workoutTemplate', 'sessionExercises.exercise', 'sessionExercises.sets')->where('user_id', auth()->id())->where('status', 'in_progress')->get();
 
-        return Inertia::render('WorkoutTemplates/index', compact('workoutTemplates', 'exercises'));
+
+        return Inertia::render('WorkoutTemplates/index', compact('workoutTemplates', 'exercises', 'workoutCompleted', 'workoutDraft', 'workoutInProgress'));
     }
 
 
@@ -127,4 +132,11 @@ class WorkoutTemplateController extends Controller
 
         return Redirect::route('workout-templates.index')->with('success', 'Template supprimer.');
     }
+
+//    public function Workouts()
+//    {
+//
+//        return Inertia::render('WorkoutTemplates/index', compact('workoutCompleted', 'workoutDraft', 'workoutInProgress'));
+//    }
+
 }
