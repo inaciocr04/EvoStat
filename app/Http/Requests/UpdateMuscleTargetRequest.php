@@ -23,6 +23,7 @@ class UpdateMuscleTargetRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'muscle_category_id' => 'nullable|exists:muscle_categories,id'
         ];
     }
 }

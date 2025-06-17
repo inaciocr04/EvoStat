@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreMuscleTargetRequest extends FormRequest
+class StoreMuscleCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class StoreMuscleTargetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
-            'muscle_category_id' => 'required|exists:muscle_categories,id',
+            'name' => 'required|string|unique:muscle_categories',
         ];
     }
 }
