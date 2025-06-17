@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MuscleCategory;
 use App\Models\MuscleTarget;
 use App\Http\Requests\StoreMuscleTargetRequest;
 use App\Http\Requests\UpdateMuscleTargetRequest;
@@ -15,9 +16,11 @@ class MuscleTargetController extends Controller
      */
     public function index()
     {
-        $muscleTargets = MuscleTarget::all();
+        $muscleCategories = MuscleCategory::with('muscleTargets')->get();
 
-        return Inertia::render('MuscleTargets/index', compact('muscleTargets'));
+        $uncategorizedMuscleTargets = MuscleTarget::where('muscle_category_id', 0)->get();
+
+        return Inertia::render('MuscleTargets/index', compact('uncategorizedMuscleTargets', 'muscleCategories'));
     }
 
     /**
@@ -25,7 +28,8 @@ class MuscleTargetController extends Controller
      */
     public function create()
     {
-        return Inertia::render('MuscleTargets/create');
+        $muscleCategories = MuscleCategory::all();
+        return Inertia::render('MuscleTargets/create', compact('muscleCategories'));
     }
 
     /**
@@ -36,7 +40,9 @@ class MuscleTargetController extends Controller
         $data = $request->validated();
         $muscleTarget = new MuscleTarget();
         $muscleTarget->fill($data);
+        $muscleTarget->muscle_category_id = $data['muscle_category_id'];
         $muscleTarget->save();
+
 
         return Redirect::route('muscleTargets.index');
     }
@@ -54,7 +60,8 @@ class MuscleTargetController extends Controller
      */
     public function edit(MuscleTarget $muscleTarget)
     {
-        return Inertia::render('MuscleTargets/edit', compact('muscleTarget'));
+        $muscleCategories = MuscleCategory::all();
+        return Inertia::render('MuscleTargets/edit', compact('muscleTarget', 'muscleCategories'));
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Exercise;
 use App\Http\Requests\StoreExerciseRequest;
 use App\Http\Requests\UpdateExerciseRequest;
+use App\Models\MuscleCategory;
 use App\Models\MuscleTarget;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -16,9 +17,9 @@ class ExerciseController extends Controller
      */
     public function index()
     {
+        $muscleCategories = MuscleCategory::with('muscleTargets.exercises')->orderBy('name')->get();
         $exercises = Exercise::with('muscleTargets')->get();
-
-        return Inertia::render('Exercises/index', compact('exercises'));
+        return Inertia::render('Exercises/index', compact('muscleCategories', 'exercises'));
     }
 
     /**

@@ -55,7 +55,7 @@ const showingNavigationDropdown = ref(false);
                                 class="h-min"
                             >
                                 <NavLink
-                                    :href="route('profils')"
+                                    :href="route('stats')"
                                     :active="route().current('stats')"
                                 >
                                     Statistiques

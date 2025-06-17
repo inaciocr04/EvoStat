@@ -6,12 +6,13 @@ defineOptions({ layout: DefaultLayout })
 
 const props = defineProps({
     exercise: Object,
+    muscleTargets: Object,
 })
 
 const form = useForm({
     name: props.exercise.name,
     description: props.exercise.description,
-    category_id: props.exercise.category_id,
+    muscle_targets: props.exercise?.muscleTargets?.map(m => String(m.id)) ?? []
 })
 
 function submit() {
@@ -48,6 +49,28 @@ function submit() {
                     {{ form.errors.description }}
                 </div>
             </div>
+            <div class="mb-4">
+                <label class="block mb-1 font-medium">Muscles ciblés</label>
+                <select
+                    v-model="form.muscle_targets"
+                    multiple
+                    class="border rounded-md px-3 py-2 w-full text-gray-700"
+                >
+                    <option
+                        v-for="muscleTarget in muscleTargets"
+                        :key="muscleTarget.id"
+                        :value="String(muscleTarget.id)"
+                    >
+                        {{ muscleTarget.name }}
+                    </option>
+
+
+                </select>
+                <p v-if="form.errors.muscle_targets" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.muscle_targets }}
+                </p>
+            </div>
+
 
             <div class="flex justify-end">
                 <button

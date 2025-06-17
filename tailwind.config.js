@@ -25,6 +25,10 @@ export default {
                 evogradientright: "linear-gradient(to right, #3690DE, #32D8A0)",
                 evogradientleft: "linear-gradient(to left, #3690DE, #32D8A0)",
                 evogradientgrayleft: "linear-gradient(to left, #384D53, #FFFFFF)",
+                evochest: "linear-gradient(to top, #FFFFFF, #32D8A0 200%)",
+                evolegs: "linear-gradient(to top, #FFFFFF, #3690DE 200%)",
+                evoarm: "linear-gradient(to top, #FFFFFF, #3690DE 200%)",
+                evoback: "linear-gradient(to top, #FFFFFF, #F50B0F 200%)",
             },
             boxShadow: {
                 'evoShadow': '0px 0px 24.1px 1px rgba(0, 0, 0, 0.25)',
@@ -32,7 +36,15 @@ export default {
             borderRadius: {
                 mainRounded: '30px',
                 secondaryRounded: '20px',
-            }
+                thirdRounded: '10px',
+            },
+            width:{
+                evocardwidth: '23.125rem',
+                evocardfullwidth: '36.25rem',
+            },
+            height:{
+              evocardheight: '18.125rem',
+            },
         },
     },
 

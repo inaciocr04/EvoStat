@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\HistoryAndStatsController;
+use App\Http\Controllers\MuscleCategoryController;
 use App\Http\Controllers\MuscleTargetController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SetController;
@@ -49,6 +51,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('sessions', WorkoutSessionController::class);
 
+    Route::get('/stats', [HistoryAndStatsController::class, 'getStats'])->name('stats');
+    Route::resource('muscleCategories', MuscleCategoryController::class);
 
 });
 
