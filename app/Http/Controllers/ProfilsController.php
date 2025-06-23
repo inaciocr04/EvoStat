@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,8 +14,10 @@ class ProfilsController extends Controller
         $countReps = $this->countReps();
         $countWorkouts = $this->countWorkouts();
 
+        $user = auth()->user();
 
-        return Inertia::render('Profils', compact('countWeight', 'countReps', 'countWorkouts'));
+
+        return Inertia::render('Profils', compact('user','countWeight', 'countReps', 'countWorkouts'));
     }
 
     private function countWeight()

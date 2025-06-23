@@ -25,3 +25,10 @@
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
+
+.group:hover button {
+    background-image: none !important;
+    background-color: white !important;
+    transition: background-color 0.5s ease-in-out, background-image 0.5s ease-in-out !important;
+}
+

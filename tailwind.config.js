@@ -24,6 +24,8 @@ export default {
             backgroundImage: {
                 evogradientright: "linear-gradient(to right, #3690DE, #32D8A0)",
                 evogradientleft: "linear-gradient(to left, #3690DE, #32D8A0)",
+                evogradienttop: "linear-gradient(to bottom, #3690DE, #32D8A0)",
+                evogradientbottom: "linear-gradient(to top, #3690DE, #32D8A0)",
                 evogradientgrayleft: "linear-gradient(to left, #384D53, #FFFFFF)",
                 evochest: "linear-gradient(to top, #FFFFFF, #32D8A0 200%)",
                 evolegs: "linear-gradient(to top, #FFFFFF, #3690DE 200%)",
@@ -36,6 +38,7 @@ export default {
             borderRadius: {
                 mainRounded: '30px',
                 secondaryRounded: '20px',
+                secondaryButtonRounded: '18px',
                 thirdRounded: '10px',
             },
             width:{

@@ -5,6 +5,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import {Head, Link, useForm} from '@inertiajs/vue3';
+import gsap from 'gsap'
+import {onMounted, ref} from "vue";
 
 const form = useForm({
     lastname: '',
@@ -23,6 +25,63 @@ const submit = () => {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+
+
+const wrapper = ref(null)
+const button = ref(null)
+const text = ref(null)
+
+onMounted(() => {
+    wrapper.value.addEventListener('mouseenter', () => {
+        gsap.to(wrapper.value, {
+            background: 'linear-gradient(to right, #22c55e, #3b82f6)',
+            duration: 0.5,
+            ease: "power2.out"
+        });
+        gsap.to(button.value, {
+            backgroundColor: '#ffffff',
+            duration: 0.5,
+            ease: "power2.out"
+        });
+        gsap.to(text.value, {
+            color: 'transparent',
+            backgroundImage: 'linear-gradient(to right, #22c55e, #3b82f6)',
+            backgroundClip: 'text',
+            webkitBackgroundClip: 'text',
+            duration: 0.5,
+            ease: "power2.out",
+            onStart: () => {
+                text.value.style.backgroundImage = 'linear-gradient(to right, #22c55e, #3b82f6)';
+                text.value.style.webkitBackgroundClip = 'text';
+                text.value.style.backgroundClip = 'text';
+            }
+        });
+    });
+
+    wrapper.value.addEventListener('mouseleave', () => {
+        gsap.to(wrapper.value, {
+            background: 'transparent',
+            duration: 0.5,
+            ease: "power2.out"
+        });
+        gsap.to(button.value, {
+            backgroundColor: '',
+            duration: 0.5,
+            ease: "power2.out"
+        });
+        gsap.to(text.value, {
+            color: '#ffffff',
+            backgroundImage: 'none',
+            duration: 0.5,
+            ease: "power2.out",
+            onComplete: () => {
+                text.value.style.backgroundClip = '';
+                text.value.style.webkitBackgroundClip = '';
+            }
+        });
+    });
+})
+
 </script>
 
 <template>
@@ -55,7 +114,7 @@ const submit = () => {
                         <option value="" disabled selected>Sexe</option>
                         <option value="male">Homme</option>
                         <option value="female">Femme</option>
-                        <option value="other">Autre</option>
+<!--                        <option value="other">Autre</option>-->
                     </select>
                     <TextInput v-model="form.weight" placeholder="Poids" type="number"/>
                 </div>
@@ -73,16 +132,24 @@ const submit = () => {
 
                 <div class="mt-6 flex justify-center">
                     <div
-                        class="group w-full sm:w-1/3 p-2 rounded-md bg-gradient-to-r from-evoblue to-evogreen transition duration-300 ease-in-out"
+                        ref="wrapper"
+                        class="p-1 rounded-secondaryRounded bg-transparent group w-1/3"
+                        style="background: transparent; transition: background 0.5s ease-in-out;"
                     >
                         <button
-                            class="w-full bg-transparent text-white text-4xl font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                            ref="button"
+                            class="w-full px-6 py-3 bg-evogradientleft rounded-secondaryButtonRounded"
+                            style="transition: background-color 0.5s ease-in-out;"
                         >
-                            GO
+      <span
+          ref="text"
+          class="text-4xl font-bold text-white"
+      >
+        GO
+      </span>
                         </button>
                     </div>
                 </div>
-
 
                 <div class="text-center mt-4">
                     <Link :href="route('login')" class="text-sm text-gray-600 hover:underline">
