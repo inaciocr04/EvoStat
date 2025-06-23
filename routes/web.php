@@ -5,6 +5,7 @@ use App\Http\Controllers\HistoryAndStatsController;
 use App\Http\Controllers\MuscleCategoryController;
 use App\Http\Controllers\MuscleTargetController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilsController;
 use App\Http\Controllers\SetController;
 use App\Http\Controllers\WorkoutSessionController;
 use App\Http\Controllers\WorkoutTemplateController;
@@ -21,9 +22,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/profils', function () {
-    return Inertia::render('Profils');
-})->middleware(['auth', 'verified'])->name('profils');
+Route::get('/profils', [ProfilsController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('profils');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

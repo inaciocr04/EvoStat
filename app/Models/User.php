@@ -57,4 +57,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(WorkoutTemplate::class);
     }
+
+    public function workoutSessions()
+    {
+        return $this->hasMany(WorkoutSession::class);
+    }
+
+
+
 }
