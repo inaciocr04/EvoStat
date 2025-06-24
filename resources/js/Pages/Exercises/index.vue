@@ -40,21 +40,25 @@ const bgClasses = {
 
 const showModal = ref(false)
 const selectedExerciseForModal = ref(null)
+const selectedCategoryColor = ref(null)
+
+const activeTab = ref('explication')
+
+// Simule des stats (true si tu as des stats, false sinon)
+const statsExist = ref(false)
 
 function openModal(exercise, category) {
     selectedExerciseForModal.value = exercise
     selectedCategoryColor.value = category.color
+    activeTab.value = 'explication' // reset onglet à l’ouverture
     showModal.value = true
 }
-
-const selectedCategoryColor = ref(null)
 
 function closeModal() {
     showModal.value = false
     selectedExerciseForModal.value = null
     selectedCategoryColor.value = null
 }
-
 
 watch(showModal, (newVal) => {
     if (newVal) {
@@ -133,18 +137,21 @@ watch(showModal, (newVal) => {
     </div>
     <!-- 🌟 MODALE EXERCICE -->
     <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+
+        <!-- Bouton croix fixé en haut à droite de l'écran -->
+        <button
+            @click="closeModal"
+            class="fixed top-4 right-4 text-gray-500 hover:text-black text-4xl z-[9999] cursor-pointer bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
+        >
+            ×
+        </button>
+
         <div
-            class="relative h-fit bg-white border rounded-mainRounded mb-3 w-evocardfullwidth flex flex-col items-center justify-between">
-            <button
-                class="absolute top-3 right-4 text-gray-500 hover:text-black text-2xl z-10 cursor-pointer bg-white rounded-full w-8 h-8 flex items-center justify-center"
-                @click="closeModal"
-            >
-                ×
-            </button>
-
-
+            class="relative h-fit bg-white border rounded-mainRounded mb-3 w-evocardfullwidth flex flex-col items-center justify-between"
+        >
+            <!-- contenu modal, sans bouton croix ici -->
             <div
-                class="py-3 flex flex-col items-center justify-center h-4/5 w-full rounded-mainRounded relative"
+                class="py-3 flex flex-col items-center justify-center h-4/5 w-full rounded-t-mainRounded relative"
                 :class="selectedCategoryColor ? bgClasses[selectedCategoryColor] : 'bg-gray-500'"
             >
                 <!-- Contenu nom + image -->
@@ -153,37 +160,67 @@ watch(showModal, (newVal) => {
                     <img src="/img/test_img_exo.png" alt="" />
                 </div>
 
-                <!-- Étoile + note en absolute en bas à droite -->
+                <!-- Étoile + note -->
                 <div class="absolute bottom-3 right-3 flex items-center gap-1 font-bold text-2xl rounded-md px-2 py-1">
                     <p>4,5</p>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         viewBox="0 0 24 24"
-                         class="size-10"
-                         fill="url(#evogradient)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-10" fill="url(#evogradient)">
                         <defs>
                             <linearGradient id="evogradient" x1="100%" y1="0%" x2="0%" y2="0%">
-                                <stop offset="0%" stop-color="#3690DE"/>
-                                <stop offset="100%" stop-color="#32D8A0"/>
+                                <stop offset="0%" stop-color="#3690DE" />
+                                <stop offset="100%" stop-color="#32D8A0" />
                             </linearGradient>
                         </defs>
-
                         <path
-                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/>
+                            d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                        />
                     </svg>
                 </div>
             </div>
 
-            <div class="px-6 py-4 bg-white rounded-b-mainRounded">
-                <div class="grid grid-cols-3 gap-6 mb-8">
-                    <p class="rounded-thirdRounded shadow-evoShadow px-8 py-2">Explication</p>
-                    <p class="rounded-thirdRounded shadow-evoShadow px-8 py-2">Explication</p>
-                    <p class="rounded-thirdRounded shadow-evoShadow px-8 py-2">Explication</p>
+            <div class=" bg-white rounded-b-mainRounded w-full mb-8">
+                <div class="grid grid-cols-3 gap-6  cursor-pointer px-6 py-4">
+                    <p
+                        @click="activeTab = 'explication'"
+                        :class="['rounded-thirdRounded shadow-evoShadow px-8 py-2 text-center', activeTab === 'explication' ? 'bg-evogradientleft font-bold text-white' : '']"
+                    >
+                        Explication
+                    </p>
+                    <p
+                        @click="activeTab = 'statistique'"
+                        :class="['rounded-thirdRounded shadow-evoShadow px-8 py-2 text-center', activeTab === 'statistique' ? 'bg-evogradientleft font-bold text-white' : '']"
+                    >
+                        Statistique
+                    </p>
+                    <p
+                        @click="activeTab = 'rank'"
+                        :class="['rounded-thirdRounded shadow-evoShadow px-8 py-2 text-center', activeTab === 'rank' ? 'bg-evogradientleft font-bold text-white' : '']"
+                    >
+                        Rank
+                    </p>
                 </div>
-                <p class="text-sm text-gray-600">{{ selectedExerciseForModal.description || 'Aucune description' }}</p>
+
+                <div>
+                    <div v-if="activeTab === 'explication'" class="px-6 py-4">
+                        <p class="text-sm text-gray-600">{{ selectedExerciseForModal.description || 'Aucune description' }}</p>
+                    </div>
+
+                    <div v-if="activeTab === 'statistique'" class="px-6 py-4">
+                        <div v-if="statsExist">
+                            <!-- Ici tu mets ton graphique, par exemple un component chart -->
+                            <p>Graphique des stats (placeholder)</p>
+                        </div>
+                        <div v-else class="px-6 py-4">
+                            <p class="italic text-gray-500">Pas de statistiques disponibles pour cet exercice.</p>
+                        </div>
+                    </div>
+
+                    <div v-if="activeTab === 'rank'" class="bg-evogradientleft h-24 flex justify-center items-center text-4xl">
+                        <p class="italic text-white font-bold">Coming soon</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
 
 </template>
 

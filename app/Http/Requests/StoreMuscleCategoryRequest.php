@@ -23,6 +23,7 @@ class StoreMuscleCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|unique:muscle_categories',
+            'color' => 'nullable|string'
         ];
     }
 }

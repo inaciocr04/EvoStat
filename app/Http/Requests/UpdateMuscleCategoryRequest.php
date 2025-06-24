@@ -22,7 +22,8 @@ class UpdateMuscleCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string'
+            'name' => 'nullable|string',
+            'color' => 'nullable|string',
         ];
     }
 }

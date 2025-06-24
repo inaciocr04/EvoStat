@@ -10,7 +10,15 @@ const props = defineProps({
 
 const form = useForm({
     name: props.muscleCategory.name,
+    color: props.muscleCategory.color,
 })
+
+const bgClasses = {
+    evochest: 'bg-evochest',
+    evolegs: 'bg-evolegs',
+    evoback: 'bg-evoback',
+    evoarm: 'bg-evoarm',
+}
 
 function submit() {
     form.put(route('muscleCategories.update', props.muscleCategory.id))
@@ -25,7 +33,7 @@ function submit() {
 
         <form @submit.prevent="submit" class="space-y-4">
             <div>
-                <label class="block font-semibold">Nom</label>
+                <label class="block font-semibold mb-1">Nom</label>
                 <input
                     v-model="form.name"
                     type="text"
@@ -34,6 +42,31 @@ function submit() {
                 <div v-if="form.errors.name" class="text-red-500 text-sm mt-1">
                     {{ form.errors.name }}
                 </div>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-1">Couleur</label>
+                <select
+                    v-model="form.color"
+                    class="w-full border border-gray-300 rounded px-3 py-2"
+                >
+                    <option disabled value="">-- Sélectionner une couleur --</option>
+                    <option value="evochest">Poitrine</option>
+                    <option value="evolegs">Jambes</option>
+                    <option value="evoback">Dos</option>
+                    <option value="evoarm">Bras</option>
+                </select>
+                <div v-if="form.errors.color" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.color }}
+                </div>
+            </div>
+
+            <div
+                v-if="form.color"
+                class="w-32 h-12 rounded mt-2 flex items-center justify-center text-white font-bold"
+                :class="bgClasses[form.color]"
+            >
+                {{ form.color }}
             </div>
 
             <div class="flex justify-end">
