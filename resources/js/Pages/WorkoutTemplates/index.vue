@@ -4,7 +4,7 @@ import DefaultLayout from '@/Layouts/DefaultLayout.vue'
 defineOptions({layout: DefaultLayout})
 
 import {ref, onMounted} from 'vue'
-import {router, useForm, Link} from '@inertiajs/vue3'
+import {router, useForm, Link, Head} from '@inertiajs/vue3'
 import Draggable from 'vuedraggable'
 import axios from 'axios'
 
@@ -133,6 +133,8 @@ function getRef(section) {
 </script>
 
 <template>
+    <Head title="Séances"/>
+
     <div class="max-w-4xl mx-auto p-6">
         <!-- Bouton création -->
         <button @click="showModal = true" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">

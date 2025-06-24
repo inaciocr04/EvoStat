@@ -73,7 +73,7 @@ const formattedWeight = computed(() => {
                 <h2 class="text-3xl font-bold">Séances récente</h2>
                 <div class="space-y-4">
                     <div v-for="lastW in latestWorkouts" :key="lastW.id"
-                         class=" px-6 py-4 rounded-mainRounded bg-white shadow-evoShadow">
+                         class=" px-6 py-4 rounded-secondaryRounded bg-white shadow-evoShadow">
                         <div class="flex justify-between items-center text-evogray">
                             <h3 class="text-2xl font-bold">
                                 {{ lastW.workout_template?.name ?? 'Template inconnu' }}
@@ -86,7 +86,7 @@ const formattedWeight = computed(() => {
                     </div>
                     <Link
                         :href="route('workout-templates.index')"
-                        class="w-full h-20 bg-evogradientleft text-white text-2xl font-bold rounded-mainRounded flex items-center justify-center"
+                        class="w-full h-20 bg-evogradientleft text-white text-2xl font-bold rounded-secondaryRounded flex items-center justify-center"
                     >
                         Nouvelle séance ?
                     </Link>

@@ -33,7 +33,8 @@ export default {
                 evoback: "linear-gradient(to top, #FFFFFF, #F50B0F 200%)",
             },
             boxShadow: {
-                'evoShadow': '0px 0px 24.1px 1px rgba(0, 0, 0, 0.25)',
+                'evoShadow': '0px 0px 8px 1px rgba(0, 0, 0, 0.25)',
+                'evoShadow2': '0px 0px 24.1px 1px rgba(0, 0, 0, 0.25)',
             },
             borderRadius: {
                 mainRounded: '30px',

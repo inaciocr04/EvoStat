@@ -1,6 +1,6 @@
 <script setup>
 import {ref, watch, onMounted, computed} from 'vue'
-import {usePage, router} from '@inertiajs/vue3'
+import {usePage, router, Head} from '@inertiajs/vue3'
 import ApexCharts from 'vue3-apexcharts'
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
 import dayjs from 'dayjs'
@@ -176,6 +176,8 @@ onMounted(() => updateChart())
 
 
 <template>
+    <Head title="Historique & stats"/>
+
     <div class="p-6">
         <h1 class="text-2xl font-bold mb-6">Statistiques de progression</h1>
 

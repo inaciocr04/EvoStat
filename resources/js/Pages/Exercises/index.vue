@@ -2,7 +2,7 @@
 defineOptions({layout: DefaultLayout})
 
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
-import {Link, router, usePage} from '@inertiajs/vue3'
+import {Link, router, usePage, Head} from '@inertiajs/vue3'
 import {ref, watch} from 'vue'
 
 
@@ -72,6 +72,8 @@ watch(showModal, (newVal) => {
 </script>
 
 <template>
+    <Head title="Exercices"/>
+
     <div class=" mx-auto p-6">
         <h1 class="text-5xl font-bold text-center mb-8 text-evogray">Exercices</h1>
 
