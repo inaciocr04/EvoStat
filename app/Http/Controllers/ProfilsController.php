@@ -13,11 +13,14 @@ class ProfilsController extends Controller
         $countWeight = $this->countWeight();
         $countReps = $this->countReps();
         $countWorkouts = $this->countWorkouts();
+        $latestWorkouts = $this->lastestWorkout();
+
+//        dd($latestWorkouts);
 
         $user = auth()->user();
 
 
-        return Inertia::render('Profils', compact('user','countWeight', 'countReps', 'countWorkouts'));
+        return Inertia::render('Profils', compact('user','countWeight', 'countReps', 'countWorkouts', 'latestWorkouts'));
     }
 
     private function countWeight()
@@ -25,6 +28,7 @@ class ProfilsController extends Controller
         $user = auth()->user();
 
         $sessions = $user->workoutSessions()
+            ->where('created_at', '>=', now()->subMonths(6))
             ->with('sessionExercises.sets')
             ->get();
 
@@ -57,6 +61,19 @@ class ProfilsController extends Controller
         $user = auth()->user();
 
         return $user->workoutSessions()->count();
+    }
+
+    private function lastestWorkout()
+    {
+        $user = auth()->user();
+
+        return $user->workoutSessions()
+            ->with('workoutTemplate')
+            ->with('sessionExercises.sets')
+            ->where('status', 'completed')
+            ->latest()
+            ->take(3)
+            ->get();
     }
 
 }

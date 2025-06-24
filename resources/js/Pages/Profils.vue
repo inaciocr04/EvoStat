@@ -3,7 +3,8 @@ import {computed} from "vue";
 
 defineOptions({layout: DefaultLayout})
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
-import {Head, usePage} from '@inertiajs/vue3';
+import {Head, usePage, Link} from '@inertiajs/vue3';
+import NavLink from "@/Components/NavLink.vue";
 
 const page = usePage()
 // console.log('Props disponibles :', page.props)
@@ -11,10 +12,28 @@ const page = usePage()
 const totalWeight = computed(() => page.props.countWeight)
 const totalReps = computed(() => page.props.countReps)
 const totalWorkouts = computed(() => page.props.countWorkouts)
+const latestWorkouts = page.props.latestWorkouts
+
+console.log(latestWorkouts)
 
 const user = page.props.user
 
 // console.log('Total soulevé:', totalWeight.value)
+
+const formattedWeight = computed(() => {
+    const weight = totalWeight.value;
+
+    if (weight >= 1_000_000_000) {
+        return (weight / 1_000_000_000).toFixed(2) + ' Mt'; // Mégatonnes
+    } else if (weight >= 1_000_000) {
+        return (weight / 1_000_000).toFixed(2) + ' kt'; // Kilotonnes
+    } else if (weight >= 1_000) {
+        return (weight / 1_000).toFixed(weight < 10_000 ? 2 : 0) + ' T'; // Tonnes
+    } else {
+        return weight + ' kg'; // Kilogrammes
+    }
+});
+
 
 </script>
 
@@ -44,10 +63,38 @@ const user = page.props.user
                 <div
                     class="rounded-thirdRounded shadow-evoShadow py-4 px-16 flex flex-col justify-start items-center space-y-6">
                     <p class="text-2xl">Total poids</p>
-                    <p class="text-4xl font-bold">1{{ totalWeight }} Kg</p></div>
+                    <p class="text-4xl font-bold">{{ formattedWeight }}</p>
+                </div>
             </div>
         </div>
 
+        <div>
+            <div class="w-1/4 space-y-6">
+                <h2 class="text-3xl font-bold">Séances récente</h2>
+                <div class="space-y-4">
+                    <div v-for="lastW in latestWorkouts" :key="lastW.id"
+                         class=" px-6 py-4 rounded-mainRounded bg-white shadow-evoShadow">
+                        <div class="flex justify-between items-center text-evogray">
+                            <h3 class="text-2xl font-bold">
+                                {{ lastW.workout_template?.name ?? 'Template inconnu' }}
+                            </h3>
+                            <p class="text-sm text-gray-500">
+                                {{ new Date(lastW.created_at).toLocaleDateString() }}
+                            </p>
+                        </div>
+                        <p>{{ lastW.session_exercises.length }} exercices</p>
+                    </div>
+                    <Link
+                        :href="route('workout-templates.index')"
+                        class="w-full h-20 bg-evogradientleft text-white text-2xl font-bold rounded-mainRounded flex items-center justify-center"
+                    >
+                        Nouvelle séance ?
+                    </Link>
+
+                </div>
+            </div>
+            <div class="w-2/3"></div>
+        </div>
     </section>
 </template>
 
