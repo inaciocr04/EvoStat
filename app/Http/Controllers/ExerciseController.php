@@ -17,10 +17,25 @@ class ExerciseController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+
         $muscleCategories = MuscleCategory::with('muscleTargets.exercises')->orderBy('name')->get();
-        $exercises = Exercise::with('muscleTargets')->get();
-        return Inertia::render('Exercises/index', compact('muscleCategories', 'exercises'));
+
+        $exercises = Exercise::with('muscleTargets')->get()->map(function ($exercise) use ($user) {
+            $exerciseArray = $exercise->toArray(); // convertit en tableau simple
+            $exerciseArray['is_liked'] = $user ? $exercise->isLikedBy($user) : false;
+            $exerciseArray['likes_count'] = $exercise->likes()->count();
+            return $exerciseArray;
+        });
+
+        //dd($exercises);
+
+        return Inertia::render('Exercises/index', [
+            'muscleCategories' => $muscleCategories,
+            'exercises' => $exercises,
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

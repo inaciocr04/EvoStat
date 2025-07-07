@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\HistoryAndStatsController;
+use App\Http\Controllers\ExerciseLikeController;
 use App\Http\Controllers\MuscleCategoryController;
 use App\Http\Controllers\MuscleTargetController;
 use App\Http\Controllers\ProfileController;
@@ -54,6 +55,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/stats', [HistoryAndStatsController::class, 'getStats'])->name('stats');
     Route::resource('muscleCategories', MuscleCategoryController::class);
+    Route::post('/exercises/{exercise}/like', [ExerciseLikeController::class, 'toggleLike'])->name('exercises.toggleLike');
 
 });
 

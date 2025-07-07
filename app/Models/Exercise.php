@@ -34,4 +34,28 @@ class Exercise extends Model
     {
         return $this->hasMany(Set::class);
     }
+
+    public function likes()
+    {
+        return $this->hasMany(ExerciseLike::class);
+    }
+
+    public function isLikedBy(User $user): bool
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+//    public function toggleLikeBy(User $user)
+//    {
+//        if ($this->isLikedBy($user)) {
+//            $this->likes()->where('user_id', $user->id)->delete();
+//        } else {
+//            $this->likes()->create([
+//                'user_id' => $user->id,
+//            ]);
+//        }
+//        return response()->noContent();
+//
+//    }
+
 }

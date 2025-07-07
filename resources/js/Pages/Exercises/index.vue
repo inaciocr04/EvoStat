@@ -1,4 +1,6 @@
 <script setup>
+import LikeButton from "@/Components/LikeButton.vue";
+
 defineOptions({layout: DefaultLayout})
 
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
@@ -9,8 +11,13 @@ import {ref, watch} from 'vue'
 const props = defineProps({
     muscleCategories: Array,
     muscleTargets: Array,
-    exercises: Array
+    exercises: {
+        type:Array,
+        required:true,
+    }
 })
+console.log(props.exercises);
+
 
 const page = usePage()
 const user = page.props.auth?.user
@@ -23,13 +30,22 @@ function deleteExercise(id) {
 
 function getUniqueExercises(category) {
     const exercisesMap = {}
+
     category.muscle_targets.forEach(mt => {
         mt.exercises.forEach(ex => {
-            exercisesMap[ex.id] = ex
+            const enriched = props.exercises.find(e => e.id === ex.id)
+            if (enriched) {
+                exercisesMap[ex.id] = enriched
+            } else {
+                exercisesMap[ex.id] = ex
+            }
         })
     })
+
     return Object.values(exercisesMap)
 }
+
+
 
 const bgClasses = {
     evochest: 'bg-evochest',
@@ -91,27 +107,29 @@ watch(showModal, (newVal) => {
                 <div
                     v-for="exercise in getUniqueExercises(category)"
                     :key="exercise.id"
-                    @click="openModal(exercise, category)"
                     class="cursor-pointer border rounded-mainRounded mb-3 w-evocardwidth h-evocardheight flex flex-col items-center justify-between"
                     :class="category.color ? bgClasses[category.color] : 'bg-gray-500'"
 
 
                 >
-                    <div class="py-3 flex flex-col items-center justify-around h-4/5">
+                    <div class="py-3 flex flex-col items-center justify-around h-4/5"
+                         @click="openModal(exercise, category)"
+                    >
                         <h3 class="text-2xl font-bold text-evogray">{{ exercise.name }}</h3>
                         <img src="/img/test_img_exo.png" alt="">
                         <!--                    <p class="text-sm text-gray-600">{{ exercise.description || 'Aucune description' }}</p>-->
                         <div v-if="user?.role === 'admin'" class="mt-2 flex gap-2">
                             <Link :href="route('exercises.edit', exercise.id)" class="btn-edit">Modifier</Link>
-                            <button @click="deleteExercise(exercise.id)" class="btn-delete">Supprimer</button>
+                            <button @click.stop="deleteExercise(exercise.id)" class="btn-delete">Supprimer</button>
                         </div>
                     </div>
                     <div class="flex justify-between items-center bg-white w-full h-1/5 rounded-b-mainRounded px-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-10 text-evogray">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
-                        </svg>
+                        <LikeButton
+                            :exercise-id="exercise.id"
+                            :initial-liked="exercise.is_liked"
+                            :initial-count="exercise.likes_count"
+                        />
+
                         <div class="flex items-center gap-1 font-bold text-2xl">
                             <p>4,5</p>
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -131,6 +149,7 @@ watch(showModal, (newVal) => {
                         </div>
                     </div>
                 </div>
+
             </div>
             <div v-else>
                 <p class="italic text-gray-500">Aucun exercice pour cette catégorie</p>
