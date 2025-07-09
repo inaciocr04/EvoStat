@@ -45,6 +45,16 @@ class Exercise extends Model
         return $this->likes()->where('user_id', $user->id)->exists();
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(ExerciseRating::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating');
+    }
+
 //    public function toggleLikeBy(User $user)
 //    {
 //        if ($this->isLikedBy($user)) {

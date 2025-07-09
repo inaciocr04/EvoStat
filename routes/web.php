@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\ExerciseRatingController;
 use App\Http\Controllers\HistoryAndStatsController;
 use App\Http\Controllers\ExerciseLikeController;
 use App\Http\Controllers\MuscleCategoryController;
@@ -56,7 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/stats', [HistoryAndStatsController::class, 'getStats'])->name('stats');
     Route::resource('muscleCategories', MuscleCategoryController::class);
     Route::post('/exercises/{exercise}/like', [ExerciseLikeController::class, 'toggleLike'])->name('exercises.toggleLike');
-
+    Route::get('/exercises/{exercise}/rating', [ExerciseRatingController::class, 'getRating']);
+    Route::post('/exercises/{exercise}/rate', [ExerciseRatingController::class, 'storeOrUpdate'])->name('exercises.rate');
 });
 
 
