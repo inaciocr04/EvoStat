@@ -13,6 +13,15 @@ function deletemuscleCategory(id) {
         router.delete(route('muscleCategories.destroy', id))
     }
 }
+
+const bgClasses = {
+    evochest: 'bg-evochest',
+    evolegs: 'bg-evolegs',
+    evoback: 'bg-evoback',
+    evoarm: 'bg-evoarm',
+    evoshoulder: 'bg-evoshoulder',
+    evocardio: 'bg-evocardio',
+}
 </script>
 
 <template>
@@ -31,6 +40,7 @@ function deletemuscleCategory(id) {
             v-for="muscleCategory in muscleCategories"
             :key="muscleCategory.id"
             class="border p-4 mb-4 rounded"
+            :class="muscleCategory.color ? bgClasses[muscleCategory.color] : 'bg-gray-500'"
         >
             <h2 class="text-xl font-semibold">{{ muscleCategory.name }}</h2>
 

@@ -3,7 +3,7 @@ import DefaultLayout from '@/Layouts/DefaultLayout.vue'
 
 defineOptions({layout: DefaultLayout})
 
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, onBeforeUnmount, computed} from 'vue'
 import {router, useForm, Link, Head} from '@inertiajs/vue3'
 import Draggable from 'vuedraggable'
 import axios from 'axios'
@@ -79,7 +79,22 @@ onMounted(() => {
 
 const openSession = ref(null) // ID de la session ouverte
 
-function toggleSession(id) {
+const activeTab = ref('completed')
+
+const tabs = [
+    {label: '✔️ Terminées', value: 'completed', color: 'text-green-700'},
+    {label: '⏳ En cours', value: 'in_progress', color: 'text-yellow-600'},
+    {label: '📝 Brouillons', value: 'draft', color: 'text-gray-700'}
+]
+
+const filteredSessions = computed(() => {
+    if (activeTab.value === 'completed') return props.workoutCompleted
+    if (activeTab.value === 'in_progress') return props.workoutInProgress
+    if (activeTab.value === 'draft') return props.workoutDraft
+    return []
+})
+
+const toggleSession = (id) => {
     openSession.value = openSession.value === id ? null : id
 }
 
@@ -96,8 +111,8 @@ const isDragging = ref({
     completed: false,
 })
 const dragStart = {
-    draft: { x: 0, scrollLeft: 0 },
-    completed: { x: 0, scrollLeft: 0 },
+    draft: {x: 0, scrollLeft: 0},
+    completed: {x: 0, scrollLeft: 0},
 }
 
 function startDrag(e, section) {
@@ -117,11 +132,11 @@ function stopDrag(section) {
 }
 
 function scrollLeft(section) {
-    getRef(section).value.scrollBy({ left: -200, behavior: 'smooth' })
+    getRef(section).value.scrollBy({left: -200, behavior: 'smooth'})
 }
 
 function scrollRight(section) {
-    getRef(section).value.scrollBy({ left: 200, behavior: 'smooth' })
+    getRef(section).value.scrollBy({left: 200, behavior: 'smooth'})
 }
 
 function getRef(section) {
@@ -130,49 +145,112 @@ function getRef(section) {
     if (section === 'in_progress') return scrollContainerInProgress
     return null
 }
+
+const openMenuId = ref(null)
+
+function toggleMenu(id) {
+    openMenuId.value = openMenuId.value === id ? null : id
+}
+
+// Fermer si clic ailleurs
+onMounted(() => {
+    templates.value = props.workoutTemplates
+
+    document.addEventListener('click', (e) => {
+        const clickedInsideMenu = e.target.closest('.template-menu-wrapper')
+        if (!clickedInsideMenu) {
+            openMenuId.value = null
+        }
+    })
+})
+onBeforeUnmount(() => {
+    document.removeEventListener('click', handleClickOutside)
+})
+
+function handleClickOutside(e) {
+    const clickedInsideMenu = e.target.closest('.template-menu-wrapper')
+    if (!clickedInsideMenu) {
+        openMenuId.value = null
+    }
+}
 </script>
 
 <template>
     <Head title="Séances"/>
-
-    <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-center text-6xl font-bold my-20">Séances</h1>
+    <div class=" mx-auto p-6">
         <!-- Bouton création -->
-        <button @click="showModal = true" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
-            + Créer un template
+        <button @click="showModal = true"
+                class="bg-evogradientleft text-white w-full h-40 px-4 py-2 rounded-mainRounded hover:bg-green-700 mb-6 text-4xl font-bold">
+            Commence une séance !
         </button>
 
         <!-- Liste -->
         <div v-if="templates.length">
-            <h1 class="text-2xl font-bold mb-4">Mes Templates de Séances</h1>
+            <h1 class="text-2xl font-bold mb-4">Tes Templates</h1>
 
-            <div v-for="template in templates" :key="template.id" class="mb-4 border p-4 rounded shadow">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-xl font-semibold">{{ template.name }}</h2>
-                    <div class="space-x-2">
+            <!-- Conteneur scrollable horizontal avec drag -->
+            <div
+                ref="scrollContainer"
+                class="flex space-x-6 overflow-x-auto cursor-grab active:cursor-grabbing scrollbar-hide select-none py-8 px-6"
+                @mousedown="startDrag"
+                @mousemove="onDrag"
+                @mouseup="stopDrag"
+                @mouseleave="stopDrag"
+                style="scroll-behavior: smooth;"
+            >
+                <div
+                    v-for="template in templates"
+                    :key="template.id"
+                    class="min-w-[20rem] min-h-56 py-2 px-6 rounded-mainRounded shadow-evoShadow relative bg-white flex flex-col justify-between"
+                >
+                    <!-- Titre + menu -->
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold">{{ template.name }}</h2>
+
+                        <!-- Bouton trois points -->
+                        <div class="relative h-fit" @click.stop>
+                            <button @click="toggleMenu(template.id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="size-9 text-gray-600 hover:text-black"
+                                     fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M6 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 2a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+                                </svg>
+                            </button>
+
+                            <!-- Menu déroulant -->
+                            <div
+                                v-if="openMenuId === template.id"
+                                class="absolute right-0 mt-1 w-32 bg-white border rounded shadow z-50"
+                            >
+                                <Link :href="route('workout-templates.edit', template.id)"
+                                      class="block px-4 py-2 hover:bg-gray-100 text-sm">
+                                    Modifier
+                                </Link>
+                                <button @click="deleteTemplate(template.id)"
+                                        class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-600">
+                                    Supprimer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Liste des exos -->
+                    <ul class="list-disc list-inside mt-2 ml-4">
+                        <li v-for="ex in template.workout_template_exercises" :key="ex.id">
+                            {{ ex.order }}. {{ ex.exercise.name }}
+                            <span class="italic text-gray-600">- {{ ex.notes }}</span>
+                        </li>
+                    </ul>
+
+                    <!-- Bouton Lancer -->
+                    <div class="space-x-2 mt-2 text-center">
                         <button @click="launchSession(template.id)"
-                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
-                            Lancer cette séance
-                        </button>
-
-                        <Link :href="route('workout-templates.edit', template.id)"
-                              class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">
-                            Modifier
-                        </Link>
-
-                        <button @click="deleteTemplate(template.id)"
-                                class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm">
-                            Supprimer
+                                class="bg-evogradienttop text-white px-3 py-1 rounded-thirdRounded hover:bg-blue-600 text-2xl font-bold w-28">
+                            GO
                         </button>
                     </div>
                 </div>
-
-                <ul class="list-disc list-inside mt-2">
-                    <li v-for="ex in template.workout_template_exercises" :key="ex.id">
-                        {{ ex.order }}. {{ ex.exercise.name }} <span class="italic text-gray-600">- {{
-                            ex.notes
-                        }}</span>
-                    </li>
-                </ul>
             </div>
         </div>
 
@@ -184,269 +262,62 @@ function getRef(section) {
         <div class="mt-10">
             <h1 class="text-2xl font-bold mb-4">Historique des Séances</h1>
 
-            <!-- Séances terminées -->
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-green-700 mb-4">✔️ Séances terminées</h2>
-
-                <div class="relative px-4 py-6">
-                    <!-- Boutons de scroll -->
-                    <button
-                        @click="scrollLeft('completed')"
-                        class="absolute -left-12 top-1/2 -translate-y-1/2 z-10 bg-white p-2 shadow rounded-full"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
-                        </svg>
-
-                    </button>
-                    <button
-                        @click="scrollRight('completed')"
-                        class="absolute -right-12 top-1/2 -translate-y-1/2 z-10 bg-white p-2 shadow rounded-full"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
-                        </svg>
-
-                    </button>
-
-                    <!-- Conteneur scrollable -->
-                    <div
-                        ref="scrollContainerCompleted"
-                        v-if="props.workoutCompleted.length"
-                        class="flex space-x-4 overflow-x-auto items-start scrollbar-hide px-10 cursor-grab active:cursor-grabbing"
-                        @mousedown="startDrag($event, 'completed')"
-                        @mousemove="onDrag($event, 'completed')"
-                        @mouseup="stopDrag('completed')"
-                        @mouseleave="stopDrag('completed')"
-                    >
-                        <div
-                            v-for="session in props.workoutCompleted"
-                            :key="session.id"
-                            class="w-64 min-w-[16rem] border rounded-lg p-4 shadow-sm bg-white transition-all"
-                        >
-                            <!-- En-tête cliquable -->
-                            <div @click="toggleSession(session.id)" class="cursor-pointer">
-                                <h3 class="text-md font-bold text-evogray truncate">
-                                    {{ session.workout_template.name ?? 'Sans nom' }}
-                                </h3>
-                                <p class="text-xs text-evogray">
-                                    {{
-                                        new Date(session.created_at).toLocaleDateString('fr-FR', {dateStyle: 'medium'})
-                                    }}
-                                </p>
-                                <p class="text-sm text-gray-700 font-medium">
-                                    {{ session.session_exercises.length }} exos —
-                                    {{
-                                        session.session_exercises.reduce((sum, ex) => sum + ex.sets.length, 0)
-                                    }} séries
-                                </p>
-                            </div>
-
-                            <!-- Contenu déroulant -->
-                            <div
-                                v-if="openSession === session.id"
-                                class="mt-3 max-h-48 overflow-y-auto space-y-2 border-t pt-2 transition-all duration-200 ease-in-out"
-                            >
-                                <div v-for="ex in session.session_exercises" :key="ex.id" class="text-sm">
-                                    <p class="font-semibold">{{ ex.order }}. {{ ex.exercise.name }}</p>
-                                    <p v-if="ex.notes" class="italic text-gray-500 text-xs">{{ ex.notes }}</p>
-
-                                    <div
-                                        v-for="(set, index) in ex.sets"
-                                        :key="index"
-                                        class="text-xs bg-gray-50 rounded px-2 py-1 mt-1 border"
-                                    >
-                                        <p><strong>Série {{ index + 1 }}</strong> — {{ set.weight }} kg, {{ set.reps }}
-                                            reps, {{ set.rest_time }}s</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <p v-else class="text-gray-500">Aucune séance terminée.</p>
-
-                </div>
-
-            </div>
-
-            <div class="mb-6">
-                <h2 class="text-xl font-semibold text-gray-700 mb-2">📝 Brouillons</h2>
-
-                <div class="relative px-4 py-6">
-                    <!-- Boutons de scroll -->
-                    <button
-                        @click="scrollLeft('draft')"
-                        class="absolute -left-12 top-1/2 -translate-y-1/2 z-10 bg-white p-2 shadow rounded-full"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
-                        </svg>
-
-                    </button>
-                    <button
-                        @click="scrollRight('draft')"
-                        class="absolute -right-12 top-1/2 -translate-y-1/2 z-10 bg-white p-2 shadow rounded-full"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
-                        </svg>
-
-                    </button>
-
-                    <!-- Conteneur scrollable -->
-                    <div
-                        ref="scrollContainerDraft"
-                        v-if="props.workoutDraft.length"
-                        class="flex space-x-4 overflow-x-auto items-start scrollbar-hide px-10 cursor-grab active:cursor-grabbing"
-                        @mousedown="startDrag($event, 'draft')"
-                        @mousemove="onDrag($event, 'draft')"
-                        @mouseup="stopDrag('draft')"
-                        @mouseleave="stopDrag('draft')"
-                    >
-                        <div
-                            v-for="session in props.workoutDraft"
-                            :key="session.id"
-                            class="w-64 min-w-[16rem] border rounded-lg p-4 shadow-sm bg-white transition-all"
-                        >
-                            <!-- En-tête cliquable -->
-                            <div @click="toggleSession(session.id)" class="cursor-pointer">
-                                <Link :href="`/sessions/${session.id}`" class="text-md font-bold text-evogray truncate">
-                                    {{ session.workout_template.name ?? 'Sans nom' }}
-                                </Link>
-                                <p class="text-xs text-evogray">
-                                    {{
-                                        new Date(session.created_at).toLocaleDateString('fr-FR', {dateStyle: 'medium'})
-                                    }}
-                                </p>
-                                <p class="text-sm text-gray-700 font-medium">
-                                    {{ session.session_exercises.length }} exos —
-                                    {{
-                                        session.session_exercises.reduce((sum, ex) => sum + ex.sets.length, 0)
-                                    }} séries
-                                </p>
-                            </div>
-
-                            <!-- Contenu déroulant -->
-                            <div
-                                v-if="openSession === session.id"
-                                class="mt-3 max-h-48 overflow-y-auto space-y-2 border-t pt-2 transition-all duration-200 ease-in-out"
-                            >
-                                <div v-for="ex in session.session_exercises" :key="ex.id" class="text-sm">
-                                    <p class="font-semibold">{{ ex.order }}. {{ ex.exercise.name }}</p>
-                                    <p v-if="ex.notes" class="italic text-gray-500 text-xs">{{ ex.notes }}</p>
-
-                                    <div
-                                        v-for="(set, index) in ex.sets"
-                                        :key="index"
-                                        class="text-xs bg-gray-50 rounded px-2 py-1 mt-1 border"
-                                    >
-                                        <p><strong>Série {{ index + 1 }}</strong> — {{ set.weight }} kg, {{ set.reps }}
-                                            reps, {{ set.rest_time }}s</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <p v-else class="text-gray-500">Aucune séance terminée.</p>
-
-                </div>
-
+            <!-- Menu d'onglets -->
+            <div class="flex justify-center space-x-8 mb-8">
+                <button
+                    v-for="tab in tabs"
+                    :key="tab.value"
+                    @click="activeTab = tab.value"
+                    :class="[
+          'px-6 py-3 rounded-lg font-semibold transition',
+          activeTab === tab.value ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+        ]"
+                >
+                    {{ tab.label }}
+                </button>
             </div>
 
 
-            <!-- Et pour les séances en cours -->
-
-            <div class="mb-6">
-                <h2 class="text-xl font-semibold text-yellow-600 mb-2">⏳ En cours</h2>
-
-                <div class="relative px-4 py-6">
-                    <!-- Boutons de scroll -->
-                    <button
-                        @click="scrollLeft('in_progress')"
-                        class="absolute -left-12 top-1/2 -translate-y-1/2 z-10 bg-white p-2 shadow rounded-full"
+            <!-- Contenu dynamique selon l’onglet -->
+            <div
+                ref="scrollContainer"
+                class="flex space-x-6 overflow-x-auto cursor-grab active:cursor-grabbing scrollbar-hide select-none"
+                @mousedown="startDrag"
+                @mousemove="onDrag"
+                @mouseup="stopDrag"
+                @mouseleave="stopDrag"
+                style="scroll-behavior: smooth;"
+            >
+                <div
+                    v-for="session in filteredSessions"
+                    :key="session.id"
+                    class="min-w-[18rem] w-72 border rounded-xl p-5 shadow-md bg-white hover:scale-[1.03] hover:shadow-lg transition-transform"
+                >
+                    <h3 class="text-lg font-bold truncate mb-1">
+                        {{ session.workout_template?.name ?? 'Sans nom' }}
+                    </h3>
+                    <p class="text-xs text-gray-500 mb-1">
+                        {{ new Date(session.created_at).toLocaleDateString('fr-FR', {dateStyle: 'medium'}) }}
+                    </p>
+                    <p class="text-sm text-gray-700 font-medium mb-1">
+                        {{ session.session_exercises.length }} exos —
+                        {{ session.session_exercises.reduce((sum, ex) => sum + ex.sets.length, 0) }} séries
+                    </p>
+                    <p
+                        class="text-xs italic"
+                        :class="{
+            'text-green-500': activeTab === 'completed',
+            'text-yellow-500': activeTab === 'in_progress',
+            'text-gray-500': activeTab === 'draft'
+          }"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
-                        </svg>
-
-                    </button>
-                    <button
-                        @click="scrollRight('in_progress')"
-                        class="absolute -right-12 top-1/2 -translate-y-1/2 z-10 bg-white p-2 shadow rounded-full"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
-                        </svg>
-
-                    </button>
-
-                    <!-- Conteneur scrollable -->
-                    <div
-                        ref="scrollContainerInProgress"
-                        v-if="props.workoutInProgress.length"
-                        class="flex space-x-4 overflow-x-auto items-start scrollbar-hide px-10 cursor-grab active:cursor-grabbing"
-                        @mousedown="startDrag($event, 'in_progress')"
-                        @mousemove="onDrag($event, 'in_progress')"
-                        @mouseup="stopDrag('in_progress')"
-                        @mouseleave="stopDrag('in_progress')"
-                    >
-                        <div
-                            v-for="session in props.workoutInProgress"
-                            :key="session.id"
-                            class="w-64 min-w-[16rem] border rounded-lg p-4 shadow-sm bg-white transition-all"
-                        >
-                            <!-- En-tête cliquable -->
-                            <div @click="toggleSession(session.id)" class="cursor-pointer">
-                                <Link :href="`/sessions/${session.id}`" class="text-md font-bold text-evogray truncate">
-                                    {{ session.workout_template.name ?? 'Sans nom' }}
-                                </Link>
-                                <p class="text-xs text-evogray">
-                                    {{
-                                        new Date(session.created_at).toLocaleDateString('fr-FR', {dateStyle: 'medium'})
-                                    }}
-                                </p>
-                                <p class="text-sm text-gray-700 font-medium">
-                                    {{ session.session_exercises.length }} exos —
-                                    {{
-                                        session.session_exercises.reduce((sum, ex) => sum + ex.sets.length, 0)
-                                    }} séries
-                                </p>
-                            </div>
-
-                            <!-- Contenu déroulant -->
-                            <div
-                                v-if="openSession === session.id"
-                                class="mt-3 max-h-48 overflow-y-auto space-y-2 border-t pt-2 transition-all duration-200 ease-in-out"
-                            >
-                                <div v-for="ex in session.session_exercises" :key="ex.id" class="text-sm">
-                                    <p class="font-semibold">{{ ex.order }}. {{ ex.exercise.name }}</p>
-                                    <p v-if="ex.notes" class="italic text-gray-500 text-xs">{{ ex.notes }}</p>
-
-                                    <div
-                                        v-for="(set, index) in ex.sets"
-                                        :key="index"
-                                        class="text-xs bg-gray-50 rounded px-2 py-1 mt-1 border"
-                                    >
-                                        <p><strong>Série {{ index + 1 }}</strong> — {{ set.weight }} kg, {{ set.reps }}
-                                            reps, {{ set.rest_time }}s</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <p v-else class="text-gray-500">Aucune séance terminée.</p>
-
+                        {{
+                            activeTab === 'completed' ? 'Terminée' : activeTab === 'in_progress' ? 'En cours' : 'Brouillon'
+                        }}
+                    </p>
                 </div>
-
             </div>
         </div>
-
 
         <!-- MODAL -->
         <Teleport to="body">
@@ -520,3 +391,4 @@ function getRef(section) {
         </Teleport>
     </div>
 </template>
+

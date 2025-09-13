@@ -14,7 +14,7 @@ class MuscleCategoryController extends Controller
      */
     public function index()
     {
-        $muscleCategories = MuscleCategory::all();
+        $muscleCategories = MuscleCategory::orderBy('name', 'asc')->get();
         return Inertia::render("MuscleCategories/index",compact("muscleCategories"));
     }
 

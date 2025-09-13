@@ -29,8 +29,10 @@ export default {
                 evogradientgrayleft: "linear-gradient(to left, #384D53, #FFFFFF)",
                 evochest: "linear-gradient(to top, #FFFFFF, #32D8A0 200%)",
                 evolegs: "linear-gradient(to top, #FFFFFF, #3690DE 200%)",
-                evoarm: "linear-gradient(to top, #FFFFFF, #3690DE 200%)",
+                evoarm: "linear-gradient(to top, #FFFFFF, #AD5FD9 200%)",
                 evoback: "linear-gradient(to top, #FFFFFF, #F50B0F 200%)",
+                evoshoulder: "linear-gradient(to top, #FFFFFF, #FFCC00 200%)",
+                evocardio: "linear-gradient(to top, #FFFFFF, #00FFEE 200%)",
             },
             boxShadow: {
                 'evoShadow': '0px 0px 8px 1px rgba(0, 0, 0, 0.25)',

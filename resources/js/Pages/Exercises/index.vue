@@ -53,6 +53,8 @@ const bgClasses = {
     evolegs: 'bg-evolegs',
     evoback: 'bg-evoback',
     evoarm: 'bg-evoarm',
+    evoshoulder: 'bg-evoshoulder',
+    evocardio: 'bg-evocardio',
 }
 
 const showModal = ref(false)

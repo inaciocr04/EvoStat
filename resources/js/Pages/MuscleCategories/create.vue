@@ -13,6 +13,8 @@ const bgClasses = {
     evolegs: 'bg-evolegs',
     evoback: 'bg-evoback',
     evoarm: 'bg-evoarm',
+    evoshoulder: 'bg-evoshoulder',
+    evocardio: 'bg-evocardio',
 }
 
 function submit() {
@@ -47,6 +49,8 @@ function submit() {
                     <option value="evolegs">Jambes</option>
                     <option value="evoback">Dos</option>
                     <option value="evoarm">Bras</option>
+                    <option value="evoshoulder">Epaules</option>
+                    <option value="evocardio">Cardio</option>
                 </select>
                 <p v-if="form.errors.color" class="text-red-500 text-sm">{{ form.errors.color }}</p>
             </div>
