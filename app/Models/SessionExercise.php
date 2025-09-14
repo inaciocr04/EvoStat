@@ -24,7 +24,7 @@ class SessionExercise extends Model
         return $this->belongsTo(WorkoutSession::class);
     }
     public function workoutTemplate() {
-        return $this->belongsTo(WorkoutTemplate::class);
+        return $this->hasOneThrough(WorkoutTemplate::class, WorkoutSession::class, 'id', 'id', 'workout_session_id', 'workout_template_id');
     }
 
     public function sets()

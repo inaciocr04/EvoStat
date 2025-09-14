@@ -16,7 +16,7 @@ return new class extends Migration
                 $table->foreignId('session_exercise_id')->constrained()->cascadeOnDelete();
             $table->decimal('weight', 5,2)->nullable();
             $table->integer('reps');
-            $table->integer('rest_time');
+            $table->integer('rest_time')->nullable();
             $table->timestamps();
         });
     }

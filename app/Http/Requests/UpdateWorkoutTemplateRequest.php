@@ -27,6 +27,10 @@ class UpdateWorkoutTemplateRequest extends FormRequest
             'exercises.*.exercise_id' => 'required|exists:exercises,id',
             'exercises.*.order' => 'required|integer|min:0',
             'exercises.*.notes' => 'nullable|string',
+            'exercises.*.estimated_sets' => 'required|integer|min:1|max:10',
+            'exercises.*.estimated_reps' => 'required|integer|min:1|max:50',
+            'exercises.*.estimated_weight' => 'nullable|numeric|min:0',
+            'exercises.*.estimated_rest_time' => 'required|numeric|min:0.1|max:10',
         ];
     }
 }

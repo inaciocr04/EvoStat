@@ -10,17 +10,43 @@ class ProfilsController extends Controller
 {
     public function index()
     {
-        $countWeight = $this->countWeight();
-        $countReps = $this->countReps();
-        $countWorkouts = $this->countWorkouts();
+        $user = auth()->user();
+        
+        // Optimisation : une seule requête pour toutes les statistiques
+        $stats = $this->getAllStats($user);
         $latestWorkouts = $this->lastestWorkout();
 
-//        dd($latestWorkouts);
+        return Inertia::render('Profils', [
+            'user' => $user,
+            'countWeight' => $stats['weight'],
+            'countReps' => $stats['reps'],
+            'countWorkouts' => $stats['workouts'],
+            'latestWorkouts' => $latestWorkouts
+        ]);
+    }
 
-        $user = auth()->user();
+    /**
+     * Optimisation : calculer toutes les statistiques en une seule requête
+     */
+    private function getAllStats($user)
+    {
+        // Requête optimisée pour récupérer toutes les données nécessaires
+        $sessions = $user->workoutSessions()
+            ->with(['sessionExercises.sets'])
+            ->get();
 
+        $allSets = $sessions->flatMap(fn ($session) => $session->sessionExercises)
+                           ->flatMap(fn ($exercise) => $exercise->sets);
 
-        return Inertia::render('Profils', compact('user','countWeight', 'countReps', 'countWorkouts', 'latestWorkouts'));
+        $recentSets = $sessions->where('created_at', '>=', now()->subMonths(6))
+                              ->flatMap(fn ($session) => $session->sessionExercises)
+                              ->flatMap(fn ($exercise) => $exercise->sets);
+
+        return [
+            'weight' => $recentSets->sum(fn ($set) => ($set->weight ?? 0) * $set->reps),
+            'reps' => $allSets->sum('reps'),
+            'workouts' => $sessions->count()
+        ];
     }
 
     private function countWeight()

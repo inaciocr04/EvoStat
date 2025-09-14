@@ -23,6 +23,8 @@ class UpdateWorkoutSessionRequest extends FormRequest
     {
         return [
             'status' => 'required|string|in:draft,in_progress,completed',
+            'total_duration' => 'nullable|integer|min:0',
+            'completed_at' => 'nullable|date',
         ];
     }
 }

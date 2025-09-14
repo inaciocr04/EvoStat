@@ -12,15 +12,42 @@ const props = defineProps({
 
 const exercices = ref([])
 
+// Fonction pour convertir les secondes en format MM:SS
+function formatRestTime(seconds) {
+    const minutes = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+}
+
+// Fonction pour convertir le format MM:SS en secondes
+function parseRestTime(formatted) {
+    const parts = formatted.split(':')
+    if (parts.length === 2) {
+        const minutes = parseInt(parts[0]) || 0
+        const seconds = parseInt(parts[1]) || 0
+        if (seconds >= 0 && seconds <= 59) {
+            return (minutes * 60) + seconds
+        }
+    }
+    return 90 // Valeur par défaut (1:30)
+}
+
 watch(() => props.session.session_exercises, (newVal) => {
     if (Array.isArray(newVal)) {
         exercices.value = newVal.map(ex => ({
             id: ex.id,
             name: ex.exercise?.name || 'Nom non défini',
-            sets: [{
-                reps: ex.notes?.default_reps || 8,
-                weight: ex.notes?.default_weight || 0,
-                rest_time: ex.notes?.default_rest_time || 60,
+            sets: ex.sets?.length ? ex.sets.map(set => ({
+                id: set.id,
+                reps: set.reps || 0,
+                weight: set.weight || 0,
+                rest_time: set.rest_time || 90,
+                rest_time_formatted: formatRestTime(set.rest_time || 90),
+            })) : [{
+                reps: 0,
+                weight: 0,
+                rest_time: 90,
+                rest_time_formatted: "01:30",
             }],
         }))
     } else {
@@ -31,9 +58,11 @@ watch(() => props.session.session_exercises, (newVal) => {
 console.log(props)
 function addSet(exIndex) {
     exercices.value[exIndex].sets.push({
+        id: null, // Nouvelle série, pas encore en base
         reps: 0,
         weight: 0,
-        rest_time: 60,
+        rest_time: 90,
+        rest_time_formatted: "01:30",
     })
 }
 
@@ -57,13 +86,14 @@ function formatDate(dateStr) {
 
 async function go() {
     try {
-        // Prépare le payload : un tableau de sets groupés par session_exercise_id
+        // Prépare le payload : un tableau de sets avec les IDs existants
         const payload = exercices.value.flatMap(ex =>
             ex.sets.map(set => ({
+                id: set.id, // Inclure l'ID si la série existe déjà
                 session_exercise_id: ex.id,
                 weight: set.weight,
                 reps: set.reps,
-                rest_time: set.rest_time,
+                rest_time: parseRestTime(set.rest_time_formatted), // Convertir MM:SS en secondes
             }))
         );
         const selectedTemplateId = ref(null);
@@ -122,7 +152,7 @@ async function go() {
                 <div class="flex items-center gap-3 mb-2 text-gray-600 font-medium">
                     <div class="w-20 text-center">Reps</div>
                     <div class="w-28 text-center">Poids (kg)</div>
-                    <div class="w-24 text-center">Repos (sec)</div>
+                    <div class="w-24 text-center">Repos (MM:SS)</div>
                     <div class="w-10"></div>
                 </div>
 
@@ -131,7 +161,9 @@ async function go() {
                            class="w-20 text-center border rounded-md px-2 py-1"/>
                     <input type="number" v-model.number="set.weight"
                            class="w-28 text-center border rounded-md px-2 py-1"/>
-                    <input type="number" v-model.number="set.rest_time"
+                    <input type="text" v-model="set.rest_time_formatted"
+                           placeholder="01:30"
+                           pattern="[0-9]{1,2}:[0-5][0-9]"
                            class="w-24 text-center border rounded-md px-2 py-1"/>
                     <button
                         @click="removeSet(exIndex, setIndex)"

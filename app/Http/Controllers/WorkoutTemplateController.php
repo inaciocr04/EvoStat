@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exercise;
+use App\Models\SessionExercise;
 use App\Models\WorkoutSession;
 use App\Models\WorkoutTemplate;
 use App\Http\Requests\StoreWorkoutTemplateRequest;
 use App\Http\Requests\UpdateWorkoutTemplateRequest;
+use App\Services\EstimatedSetsService;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -50,20 +52,85 @@ class WorkoutTemplateController extends Controller
     public function store(StoreWorkoutTemplateRequest $request)
     {
         $data = $request->validated();
+        $estimatedSetsService = new EstimatedSetsService();
+        
         $workoutTemplate = WorkoutTemplate::create([
             'name' => $data['name'],
             'user_id' => auth()->id(),
         ]);
 
         foreach ($data['exercises'] as $exercise) {
+            // Récupérer l'exercice pour générer des estimations intelligentes si nécessaire
+            $exerciseModel = Exercise::find($exercise['exercise_id']);
+            
             $workoutTemplate->workoutTemplateExercises()->create([
                 'exercise_id' => $exercise['exercise_id'],
                 'order' => $exercise['order'],
                 'notes' => $exercise['notes'] ?? null,
+                // Utiliser les valeurs saisies par l'utilisateur
+                'estimated_sets' => $exercise['estimated_sets'],
+                'estimated_reps' => $exercise['estimated_reps'],
+                'estimated_weight' => $exercise['estimated_weight'] ?? $estimatedSetsService->generateSmartEstimatedWeight(auth()->id(), $exercise['exercise_id']),
+                'estimated_rest_time' => $exercise['estimated_rest_time'] * 60, // Convertir minutes en secondes
             ]);
         }
 
-        return Redirect::route('workout-templates.index')->with('success', 'Template créé.');
+        return Redirect::route('workout-templates.index')
+            ->with('success', 'Template créé avec séries estimées.')
+            ->with('template_id', $workoutTemplate->id);
+    }
+
+    /**
+     * Store a newly created resource and start session immediately
+     */
+    public function storeAndStart(StoreWorkoutTemplateRequest $request)
+    {
+        $data = $request->validated();
+        $estimatedSetsService = new EstimatedSetsService();
+        
+        $workoutTemplate = WorkoutTemplate::create([
+            'name' => $data['name'],
+            'user_id' => auth()->id(),
+        ]);
+
+        foreach ($data['exercises'] as $exercise) {
+            // Récupérer l'exercice pour générer des estimations intelligentes si nécessaire
+            $exerciseModel = Exercise::find($exercise['exercise_id']);
+            
+            $workoutTemplate->workoutTemplateExercises()->create([
+                'exercise_id' => $exercise['exercise_id'],
+                'order' => $exercise['order'],
+                'notes' => $exercise['notes'] ?? null,
+                // Utiliser les valeurs saisies par l'utilisateur
+                'estimated_sets' => $exercise['estimated_sets'],
+                'estimated_reps' => $exercise['estimated_reps'],
+                'estimated_weight' => $exercise['estimated_weight'] ?? $estimatedSetsService->generateSmartEstimatedWeight(auth()->id(), $exercise['exercise_id']),
+                'estimated_rest_time' => $exercise['estimated_rest_time'] * 60, // Convertir minutes en secondes
+            ]);
+        }
+
+        // Créer la session directement
+        $session = WorkoutSession::create([
+            'user_id' => auth()->id(),
+            'workout_template_id' => $workoutTemplate->id,
+            'status' => 'draft',
+        ]);
+
+        // Créer les exercices de session et les séries estimées
+        foreach ($workoutTemplate->workoutTemplateExercises as $templateExercise) {
+            $sessionExercise = SessionExercise::create([
+                'workout_session_id' => $session->id,
+                'exercise_id' => $templateExercise->exercise_id,
+                'order' => $templateExercise->order,
+                'notes' => $templateExercise->notes,
+            ]);
+
+            // Générer automatiquement les séries estimées
+            $estimatedSetsService->createEstimatedSets($sessionExercise, $templateExercise);
+        }
+
+        // Rediriger vers la session créée
+        return redirect("/sessions/{$session->id}");
     }
 
     /**
@@ -89,6 +156,10 @@ class WorkoutTemplateController extends Controller
                 'exercise_id' => $wte->exercise_id,
                 'order' => $wte->order,
                 'notes' => $wte->notes,
+                'estimated_sets' => $wte->estimated_sets,
+                'estimated_reps' => $wte->estimated_reps,
+                'estimated_weight' => $wte->estimated_weight,
+                'estimated_rest_time' => $wte->estimated_rest_time / 60, // Convertir secondes en minutes
                 'name' => $wte->exercise->name ?? 'Exercice inconnu',
             ];
         });
@@ -114,6 +185,10 @@ class WorkoutTemplateController extends Controller
                 [
                     'order' => $exercise['order'],
                     'notes' => $exercise['notes'] ?? null,
+                    'estimated_sets' => $exercise['estimated_sets'],
+                    'estimated_reps' => $exercise['estimated_reps'],
+                    'estimated_weight' => $exercise['estimated_weight'],
+                    'estimated_rest_time' => $exercise['estimated_rest_time'] * 60, // Convertir minutes en secondes
                 ]
             );
         }

@@ -11,6 +11,10 @@ class WorkoutTemplateExercise extends Model
         'exercise_id',
         'order',
         'notes',
+        'estimated_sets',
+        'estimated_reps',
+        'estimated_weight',
+        'estimated_rest_time',
     ];
 
     public function workoutTemplate()

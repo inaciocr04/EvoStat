@@ -10,6 +10,7 @@ use App\Models\SessionExercise;
 use App\Models\WorkoutSession;
 use App\Models\WorkoutTemplate;
 use App\Models\Set;
+use App\Services\EstimatedSetsService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -26,7 +27,8 @@ class WorkoutSessionController extends Controller
             $session = null;
 
             DB::transaction(function () use ($validated, $user, &$session) {
-                $template = WorkoutTemplate::with('exercises')->findOrFail($validated['template_id']);
+                $template = WorkoutTemplate::with('workoutTemplateExercises.exercise')->findOrFail($validated['template_id']);
+                $estimatedSetsService = new EstimatedSetsService();
 
                 $session = WorkoutSession::create([
                     'user_id' => $user->id,
@@ -34,13 +36,16 @@ class WorkoutSessionController extends Controller
                     'status' => 'draft',
                 ]);
 
-                foreach ($template->exercises as $exercise) {
-                    SessionExercise::create([
+                foreach ($template->workoutTemplateExercises as $templateExercise) {
+                    $sessionExercise = SessionExercise::create([
                         'workout_session_id' => $session->id,
-                        'exercise_id' => $exercise->id,
-                        'order' => $exercise->pivot->order,
-                        'notes' => $exercise->pivot->notes,
+                        'exercise_id' => $templateExercise->exercise_id,
+                        'order' => $templateExercise->order,
+                        'notes' => $templateExercise->notes,
                     ]);
+
+                    // Générer automatiquement les séries estimées
+                    $estimatedSetsService->createEstimatedSets($sessionExercise, $templateExercise);
                 }
             });
 
@@ -58,9 +63,11 @@ class WorkoutSessionController extends Controller
 
     public function getSessionWithExercises($id)
     {
-        $session = WorkoutSession::with(['sessionExercises.exercise', 'workoutTemplate'])->findOrFail($id);
-
-//        dd($session);
+        $session = WorkoutSession::with([
+            'sessionExercises.exercise', 
+            'sessionExercises.sets',
+            'workoutTemplate'
+        ])->findOrFail($id);
 
         return Inertia::render('WorkoutSessions/StartSession', compact('session'));
     }
@@ -70,18 +77,21 @@ class WorkoutSessionController extends Controller
         try {
             $data = $request->validated()['sets']; // contient directement une liste plate de sets
 
-            // Grouper les sets par session_exercise_id
-            $grouped = collect($data)->groupBy('session_exercise_id');
-
-            foreach ($grouped as $sessionExerciseId => $sets) {
-                Set::where('session_exercise_id', $sessionExerciseId)->delete();
-
-                foreach ($sets as $set) {
+            foreach ($data as $setData) {
+                if (isset($setData['id']) && $setData['id']) {
+                    // Mettre à jour une série existante
+                    Set::where('id', $setData['id'])->update([
+                        'reps' => $setData['reps'],
+                        'weight' => $setData['weight'] ?? null,
+                        'rest_time' => $setData['rest_time'] ?? null,
+                    ]);
+                } else {
+                    // Créer une nouvelle série
                     Set::create([
-                        'session_exercise_id' => $sessionExerciseId,
-                        'reps' => $set['reps'],
-                        'weight' => $set['weight'] ?? null,
-                        'rest_time' => $set['rest_time'] ?? null,
+                        'session_exercise_id' => $setData['session_exercise_id'],
+                        'reps' => $setData['reps'],
+                        'weight' => $setData['weight'] ?? null,
+                        'rest_time' => $setData['rest_time'] ?? null,
                     ]);
                 }
             }

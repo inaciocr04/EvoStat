@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('exercises', ExerciseController::class);
     Route::resource('muscleTargets', MuscleTargetController::class);
     Route::resource('workout-templates', WorkoutTemplateController::class);
+    Route::post('/workout-templates/store-and-start', [WorkoutTemplateController::class, 'storeAndStart'])
+        ->name('workout-templates.store-and-start');
     Route::post('/workout-templates/{template}/start', [WorkoutSessionController::class, 'startFromTemplate'])
         ->name('workout_templates.start');
 
@@ -55,10 +57,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('sessions', WorkoutSessionController::class);
 
     Route::get('/stats', [HistoryAndStatsController::class, 'getStats'])->name('stats');
+    Route::get('/statistics', [App\Http\Controllers\StatsController::class, 'index'])->name('statistics');
     Route::resource('muscleCategories', MuscleCategoryController::class);
     Route::post('/exercises/{exercise}/like', [ExerciseLikeController::class, 'toggleLike'])->name('exercises.toggleLike');
+    Route::get('/exercises/liked', [ExerciseLikeController::class, 'index'])->name('exercises.liked');
+    Route::get('/api/exercises/liked', [ExerciseLikeController::class, 'getLikedExercises'])->name('api.exercises.liked');
     Route::get('/exercises/{exercise}/rating', [ExerciseRatingController::class, 'getRating']);
     Route::post('/exercises/{exercise}/rate', [ExerciseRatingController::class, 'storeOrUpdate'])->name('exercises.rate');
+    
 });
 
 

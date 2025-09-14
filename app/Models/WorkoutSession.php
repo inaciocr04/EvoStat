@@ -12,6 +12,7 @@ class WorkoutSession extends Model
         'status',
         'started_at',
         'completed_at',
+        'total_duration',
     ];
 
     public function workoutTemplate() {

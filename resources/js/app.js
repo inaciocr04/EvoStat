@@ -7,7 +7,10 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import axios from 'axios';
 
-axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+const csrfToken = document.querySelector('meta[name="csrf-token"]');
+if (csrfToken) {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
+}
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'EvoStat';

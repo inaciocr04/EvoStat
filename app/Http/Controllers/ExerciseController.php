@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateExerciseRequest;
 use App\Models\MuscleCategory;
 use App\Models\MuscleTarget;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
 class ExerciseController extends Controller
@@ -19,16 +20,24 @@ class ExerciseController extends Controller
     {
         $user = auth()->user();
 
-        $muscleCategories = MuscleCategory::with('muscleTargets.exercises')->orderBy('name')->get();
-
-        $exercises = Exercise::with('muscleTargets')->get()->map(function ($exercise) use ($user) {
-            $exerciseArray = $exercise->toArray(); // convertit en tableau simple
-            $exerciseArray['is_liked'] = $user ? $exercise->isLikedBy($user) : false;
-            $exerciseArray['likes_count'] = $exercise->likes()->count();
-            return $exerciseArray;
+        // Cache des catégories musculaires (rarement modifiées)
+        $muscleCategories = Cache::remember('muscle_categories', 3600, function () {
+            return MuscleCategory::with('muscleTargets.exercises')->orderBy('name')->get();
         });
 
-        //dd($exercises);
+        // Cache des exercices avec likes (invalidation lors des modifications)
+        $cacheKey = 'exercises_with_likes_' . ($user ? $user->id : 'guest');
+        $exercises = Cache::remember($cacheKey, 1800, function () use ($user) {
+            return Exercise::with(['muscleTargets', 'likes'])
+                ->withCount('likes')
+                ->get()
+                ->map(function ($exercise) use ($user) {
+                    $exerciseArray = $exercise->toArray();
+                    $exerciseArray['is_liked'] = $user ? $exercise->likes->contains('user_id', $user->id) : false;
+                    $exerciseArray['likes_count'] = $exercise->likes_count;
+                    return $exerciseArray;
+                });
+        });
 
         return Inertia::render('Exercises/index', [
             'muscleCategories' => $muscleCategories,
@@ -57,6 +66,10 @@ class ExerciseController extends Controller
         $exercise->save();
 
         $exercise->muscleTargets()->sync($data['muscle_targets'] ?? []);
+
+        // Invalider le cache des exercices
+        Cache::forget('muscle_categories');
+        Cache::flush(); // Invalider tous les caches pour être sûr
 
         return Redirect::route('exercises.index');
     }
@@ -89,6 +102,9 @@ class ExerciseController extends Controller
 
         $exercise->muscleTargets()->sync($data['muscle_targets'] ?? []);
 
+        // Invalider le cache des exercices
+        Cache::forget('muscle_categories');
+        Cache::flush(); // Invalider tous les caches pour être sûr
 
         return Redirect::route('exercises.index');
     }
@@ -101,6 +117,10 @@ class ExerciseController extends Controller
         $exercise->muscleTargets()->detach();
 
         $exercise->delete();
+
+        // Invalider le cache des exercices
+        Cache::forget('muscle_categories');
+        Cache::flush(); // Invalider tous les caches pour être sûr
 
         return Redirect::route('exercises.index');
     }

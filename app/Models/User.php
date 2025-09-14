@@ -18,7 +18,6 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'email',
         'pseudo',
         'age',
@@ -66,6 +65,12 @@ class User extends Authenticatable
     public function exerciseLikes()
     {
         return $this->hasMany(ExerciseLike::class);
+    }
+
+    public function likedExercises()
+    {
+        return $this->belongsToMany(Exercise::class, 'exercise_likes')
+                    ->withTimestamps();
     }
 
 

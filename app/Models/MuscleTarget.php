@@ -16,7 +16,7 @@ class MuscleTarget extends Model
         return $this->belongsToMany(Exercise::class);
     }
 
-    public function muscle_categories()
+    public function muscleCategory()
     {
         return $this->belongsTo(MuscleCategory::class);
     }

@@ -17,4 +17,32 @@ export default defineConfig({
             },
         }),
     ],
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    // Séparer les bibliothèques lourdes
+                    'vendor': ['vue', '@inertiajs/vue3'],
+                    'charts': ['apexcharts', 'chart.js', 'vue3-apexcharts'],
+                    'utils': ['gsap', 'dayjs', 'vuedraggable']
+                }
+            }
+        },
+        // Optimisations de performance
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true,
+                drop_debugger: true,
+            }
+        },
+        // Augmenter la limite de taille des chunks
+        chunkSizeWarningLimit: 1000,
+    },
+    // Optimisations de développement
+    server: {
+        hmr: {
+            overlay: false
+        }
+    }
 });

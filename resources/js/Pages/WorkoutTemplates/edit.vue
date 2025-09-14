@@ -32,7 +32,11 @@ onMounted(() => {
             id: ex.id || Date.now() + Math.random(),
             exercise_id: ex.exercise_id,
             order: ex.order,
-            notes: ex.notes || ''
+            notes: ex.notes || '',
+            estimated_sets: ex.estimated_sets || 3,
+            estimated_reps: ex.estimated_reps || 10,
+            estimated_weight: ex.estimated_weight || null,
+            estimated_rest_time: ex.estimated_rest_time || 1.5
         }))
         : []
 })
@@ -42,7 +46,11 @@ function addExercise() {
         id: null,
         exercise_id: null,
         order: form.exercises.length + 1,
-        notes: ''
+        notes: '',
+        estimated_sets: 3,
+        estimated_reps: 10,
+        estimated_weight: null,
+        estimated_rest_time: 1.5
     })
 }
 
@@ -96,6 +104,38 @@ function submit() {
                             <p v-if="form.errors[`exercises.${index}.exercise_id`]" class="text-red-500 text-sm">
                                 {{ form.errors[`exercises.${index}.exercise_id`] }}
                             </p>
+
+                            <!-- Séries estimées -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2">
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Séries</label>
+                                    <input v-model="exercise.estimated_sets" type="number" min="1" max="10" class="w-full border rounded px-2 py-1 text-sm" />
+                                    <p v-if="form.errors[`exercises.${index}.estimated_sets`]" class="text-red-500 text-xs">
+                                        {{ form.errors[`exercises.${index}.estimated_sets`] }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Répétitions</label>
+                                    <input v-model="exercise.estimated_reps" type="number" min="1" max="50" class="w-full border rounded px-2 py-1 text-sm" />
+                                    <p v-if="form.errors[`exercises.${index}.estimated_reps`]" class="text-red-500 text-xs">
+                                        {{ form.errors[`exercises.${index}.estimated_reps`] }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Poids (kg)</label>
+                                    <input v-model="exercise.estimated_weight" type="number" step="0.5" min="0" class="w-full border rounded px-2 py-1 text-sm" placeholder="Auto" />
+                                    <p v-if="form.errors[`exercises.${index}.estimated_weight`]" class="text-red-500 text-xs">
+                                        {{ form.errors[`exercises.${index}.estimated_weight`] }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-600 mb-1">Repos (min)</label>
+                                    <input v-model="exercise.estimated_rest_time" type="number" min="0.1" max="10" step="0.01" class="w-full border rounded px-2 py-1 text-sm" placeholder="1.56" />
+                                    <p v-if="form.errors[`exercises.${index}.estimated_rest_time`]" class="text-red-500 text-xs">
+                                        {{ form.errors[`exercises.${index}.estimated_rest_time`] }}
+                                    </p>
+                                </div>
+                            </div>
 
                             <!-- Notes -->
                             <textarea

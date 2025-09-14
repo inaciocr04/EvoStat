@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\WorkoutSession;
+use App\Models\Exercise;
+use App\Models\Set;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,14 +18,13 @@ class HistoryAndStatsController extends Controller
         $user = $request->user();
         $exerciseId = $request->query('exercise_id');
 
-        $exercises = DB::table('exercises')
-            ->join('session_exercises', 'session_exercises.exercise_id', '=', 'exercises.id')
-            ->join('workout_sessions', 'workout_sessions.id', '=', 'session_exercises.workout_session_id')
-            ->where('workout_sessions.user_id', $user->id)
-            ->select('exercises.id', 'exercises.name')
-            ->distinct()
-            ->orderBy('exercises.name')
-            ->get();
+        // Récupérer les exercices utilisés par l'utilisateur via Eloquent
+        $exercises = Exercise::whereHas('sessionExercises.workoutSession', function($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+        ->select('id', 'name')
+        ->orderBy('name')
+        ->get();
 
         $stats = collect();
         $exerciseName = null;

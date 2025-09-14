@@ -1,11 +1,13 @@
 <script setup>
 import LikeButton from "@/Components/LikeButton.vue";
+import LoadingSpinner from "@/Components/LoadingSpinner.vue";
+import SkeletonLoader from "@/Components/SkeletonLoader.vue";
 
 defineOptions({layout: DefaultLayout})
 
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
 import {Link, router, usePage, Head} from '@inertiajs/vue3'
-import {ref, watch} from 'vue'
+import {ref, watch, computed, onMounted} from 'vue'
 import StarRating from "@/Components/StarRating.vue";
 
 
@@ -17,11 +19,25 @@ const props = defineProps({
         required:true,
     }
 })
-console.log(props.exercises);
-
 
 const page = usePage()
 const user = page.props.auth?.user
+
+// États de chargement
+const isLoading = ref(false)
+const isInitialLoad = ref(true)
+
+// Computed pour les exercices avec pagination virtuelle
+const visibleExercises = computed(() => {
+    return props.exercises.slice(0, 20) // Afficher seulement les 20 premiers
+})
+
+// Simulation du chargement initial
+onMounted(() => {
+    setTimeout(() => {
+        isInitialLoad.value = false
+    }, 1000)
+})
 
 function deleteExercise(id) {
     if (confirm('Voulez-vous vraiment supprimer cet exercice ?')) {

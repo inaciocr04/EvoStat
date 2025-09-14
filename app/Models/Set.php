@@ -13,14 +13,14 @@ class Set extends Model
         'reps',
         'rest_time',
     ];
-    public function workoutExercise()
+    public function sessionExercise()
     {
-        return $this->belongsTo(WorkoutTemplateExercise::class);
+        return $this->belongsTo(SessionExercise::class);
     }
 
-    public function exercises()
+    public function exercise()
     {
-        return $this->belongsTo(Exercise::class);
+        return $this->hasOneThrough(Exercise::class, SessionExercise::class, 'id', 'id', 'session_exercise_id', 'exercise_id');
     }
 
 }

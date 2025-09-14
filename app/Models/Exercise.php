@@ -35,6 +35,11 @@ class Exercise extends Model
         return $this->hasMany(Set::class);
     }
 
+    public function sessionExercises()
+    {
+        return $this->hasMany(SessionExercise::class);
+    }
+
     public function likes()
     {
         return $this->hasMany(ExerciseLike::class);

@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('exercise_likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('exercise_id')->constrained('exercises')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('exercise_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-
+            
+            // Empêcher les doublons (un utilisateur ne peut liker qu'une fois le même exercice)
             $table->unique(['user_id', 'exercise_id']);
         });
     }
