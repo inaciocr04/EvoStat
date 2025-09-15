@@ -40,6 +40,10 @@ class StatsController extends Controller
         
         // Statistiques récentes (30 derniers jours)
         $recentStats = $this->getRecentStats($user);
+        
+        // Liste des exercices spécifiques pour le graphique de progression
+        $allowedExerciseNames = ['Développé couché', 'Squat', 'Traction', 'Curl biceps'];
+        $exercises = Exercise::whereIn('name', $allowedExerciseNames)->select('id', 'name')->get();
 
         return Inertia::render('Stats', [
             'generalStats' => $generalStats,
@@ -50,6 +54,7 @@ class StatsController extends Controller
             'durationStats' => $durationStats,
             'topExercises' => $topExercises,
             'recentStats' => $recentStats,
+            'exercises' => $exercises,
         ]);
     }
 
