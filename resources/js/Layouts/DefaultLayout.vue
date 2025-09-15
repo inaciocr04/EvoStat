@@ -1,6 +1,6 @@
 <template>
     <AuthenticatedLayout/>
-    <main class="px-32">
+    <main class="px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
         <slot/>
     </main>
     <FooterBar />

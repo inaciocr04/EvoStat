@@ -39,61 +39,63 @@ const formattedWeight = computed(() => {
 
 <template>
     <Head title="Profils"/>
-    <section class="space-y-8 mt-8">
+    <section class="space-y-6 sm:space-y-8 mt-4 sm:mt-8 px-4 sm:px-0">
         <div class="flex flex-col justify-center items-center gap-3">
             <div class="bg-evogradienttop rounded-full p-2">
                 <div
-                    class="bg-evogray rounded-full w-40 h-40 flex justify-center items-center">
-                    <img src="/img/logo_evostat.png" alt="">
+                    class="bg-evogray rounded-full w-32 h-32 sm:w-40 sm:h-40 flex justify-center items-center">
+                    <img src="/img/logo_evostat.png" alt="" class="w-16 h-16 sm:w-20 sm:h-20">
                 </div>
             </div>
-            <h1 class="text-4xl text-evogray font-bold">{{ user.pseudo }}</h1>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl text-evogray font-bold">{{ user.pseudo }}</h1>
         </div>
 
         <div class="w-full flex justify-center items-center">
-            <div class="grid grid-cols-3 gap-6 mb-8 text-evogray">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 text-evogray">
                 <div
-                    class="rounded-thirdRounded shadow-evoShadow py-4 px-16 flex flex-col justify-start items-center space-y-6">
-                    <p class="text-2xl">Séances</p>
-                    <p class="text-4xl font-bold">{{ totalWorkouts }}</p></div>
+                    class="rounded-thirdRounded shadow-evoShadow py-3 sm:py-4 px-8 sm:px-16 flex flex-col justify-start items-center space-y-4 sm:space-y-6">
+                    <p class="text-lg sm:text-xl lg:text-2xl">Séances</p>
+                    <p class="text-2xl sm:text-3xl lg:text-4xl font-bold">{{ totalWorkouts }}</p>
+                </div>
                 <div
-                    class="rounded-thirdRounded shadow-evoShadow py-4 px-16 flex flex-col justify-start items-center space-y-6">
-                    <p class="text-2xl">Répétitions</p>
-                    <p class="text-4xl font-bold">{{ totalReps }}</p></div>
+                    class="rounded-thirdRounded shadow-evoShadow py-3 sm:py-4 px-8 sm:px-16 flex flex-col justify-start items-center space-y-4 sm:space-y-6">
+                    <p class="text-lg sm:text-xl lg:text-2xl">Répétitions</p>
+                    <p class="text-2xl sm:text-3xl lg:text-4xl font-bold">{{ totalReps }}</p>
+                </div>
                 <div
-                    class="rounded-thirdRounded shadow-evoShadow py-4 px-16 flex flex-col justify-start items-center space-y-6">
-                    <p class="text-2xl">Total poids</p>
-                    <p class="text-4xl font-bold">{{ formattedWeight }}</p>
+                    class="rounded-thirdRounded shadow-evoShadow py-3 sm:py-4 px-8 sm:px-16 flex flex-col justify-start items-center space-y-4 sm:space-y-6">
+                    <p class="text-lg sm:text-xl lg:text-2xl">Total poids</p>
+                    <p class="text-2xl sm:text-3xl lg:text-4xl font-bold">{{ formattedWeight }}</p>
                 </div>
             </div>
         </div>
 
-        <div>
-            <div class="w-1/4 space-y-6">
-                <h2 class="text-3xl font-bold">Séances récente</h2>
-                <div class="space-y-4">
+        <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
+            <div class="w-full lg:w-1/4 space-y-4 sm:space-y-6">
+                <h2 class="text-2xl sm:text-3xl font-bold">Séances récente</h2>
+                <div class="space-y-3 sm:space-y-4">
                     <div v-for="lastW in latestWorkouts" :key="lastW.id"
-                         class=" px-6 py-4 rounded-secondaryRounded bg-white shadow-evoShadow">
-                        <div class="flex justify-between items-center text-evogray">
-                            <h3 class="text-2xl font-bold">
+                         class="px-4 sm:px-6 py-3 sm:py-4 rounded-secondaryRounded bg-white shadow-evoShadow">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-evogray gap-2">
+                            <h3 class="text-lg sm:text-xl lg:text-2xl font-bold">
                                 {{ lastW.workout_template?.name ?? 'Template inconnu' }}
                             </h3>
-                            <p class="text-sm text-gray-500">
+                            <p class="text-xs sm:text-sm text-gray-500">
                                 {{ new Date(lastW.created_at).toLocaleDateString() }}
                             </p>
                         </div>
-                        <p>{{ lastW.session_exercises.length }} exercices</p>
+                        <p class="text-sm sm:text-base">{{ lastW.session_exercises.length }} exercices</p>
                     </div>
                     <Link
                         :href="route('workout-templates.index')"
-                        class="w-full h-20 bg-evogradientleft text-white text-2xl font-bold rounded-secondaryRounded flex items-center justify-center"
+                        class="w-full h-16 sm:h-20 bg-evogradientleft text-white text-lg sm:text-xl lg:text-2xl font-bold rounded-secondaryRounded flex items-center justify-center"
                     >
                         Nouvelle séance ?
                     </Link>
 
                 </div>
             </div>
-            <div class="w-2/3"></div>
+            <div class="w-full lg:w-2/3"></div>
         </div>
     </section>
 </template>

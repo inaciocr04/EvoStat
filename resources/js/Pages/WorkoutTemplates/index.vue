@@ -249,34 +249,34 @@ function handleClickOutside(e) {
 
 <template>
     <Head title="Séances"/>
-    <h1 class="text-center text-6xl font-bold my-20">Séances</h1>
-    <div class=" mx-auto p-6">
+    <h1 class="text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold my-8 sm:my-12 md:my-16 lg:my-20">Séances</h1>
+    <div class="mx-auto p-4 sm:p-6">
         <!-- Bouton création -->
         <button @click="showModal = true"
-                class="bg-evogradientleft text-white w-full h-40 px-4 py-2 rounded-mainRounded hover:bg-green-700 mb-6 text-4xl font-bold">
+                class="bg-evogradientleft text-white w-full h-24 sm:h-32 md:h-40 px-4 py-2 rounded-mainRounded hover:bg-green-700 mb-4 sm:mb-6 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
             Commence une séance !
         </button>
 
         <!-- SECTION TEMPLATES -->
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-6 mb-8">
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8">
         <div v-if="templates.length">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-4">
                     <div>
-                        <h1 class="text-3xl font-bold text-gray-800">Tes Templates</h1>
-                        <p class="text-gray-600 mt-1">Créez et gérez vos séances d'entraînement</p>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Tes Templates</h1>
+                        <p class="text-gray-600 mt-1 text-sm sm:text-base">Créez et gérez vos séances d'entraînement</p>
                     </div>
                     <div class="flex space-x-2">
                         <button @click="scrollTemplatesLeft" 
-                                class="bg-white hover:bg-gray-50 rounded-full p-3 shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="bg-white hover:bg-gray-50 rounded-full p-2 sm:p-3 shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 :disabled="!canScrollLeft">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                             </svg>
                         </button>
                         <button @click="scrollTemplatesRight" 
-                                class="bg-white hover:bg-gray-50 rounded-full p-3 shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="bg-white hover:bg-gray-50 rounded-full p-2 sm:p-3 shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                 :disabled="!canScrollRight">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                         </button>
@@ -286,7 +286,7 @@ function handleClickOutside(e) {
             <!-- Conteneur scrollable horizontal avec drag -->
             <div
                 ref="templatesScrollContainer"
-                class="flex space-x-6 overflow-x-auto cursor-grab active:cursor-grabbing scrollbar-hide select-none py-8 px-6"
+                class="flex space-x-4 sm:space-x-6 overflow-x-auto cursor-grab active:cursor-grabbing scrollbar-hide select-none py-4 sm:py-8 px-2 sm:px-6"
                 @mousedown="startDrag"
                 @mousemove="onDrag"
                 @mouseup="stopDrag"
@@ -297,12 +297,12 @@ function handleClickOutside(e) {
                 <div
                     v-for="template in templates"
                     :key="template.id"
-                    class="min-w-[20rem] bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex justify-between flex-col px-6 py-6"
+                    class="min-w-[18rem] sm:min-w-[20rem] bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex justify-between flex-col px-4 sm:px-6 py-4 sm:py-6"
                 >
                     <!-- Header -->
                     <div>
                         <div class="flex justify-between items-start">
-                            <h2 class="text-xl font-bold text-gray-800">{{ template.name }}</h2>
+                            <h2 class="text-lg sm:text-xl font-bold text-gray-800">{{ template.name }}</h2>
                             
                             <!-- Menu trois points -->
                             <div class="relative" @click.stop>
@@ -326,13 +326,13 @@ function handleClickOutside(e) {
                     </div>
 
                     <!-- Liste des exercices -->
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <div class="space-y-2">
                             <div v-for="ex in template.workout_template_exercises.slice(0, 5)" :key="ex.id" 
-                                 class="text-gray-700 text-sm">
+                                 class="text-gray-700 text-xs sm:text-sm">
                                 {{ ex.estimated_sets }} x {{ ex.estimated_reps }} {{ ex.exercise.name }}
                             </div>
-                            <div v-if="template.workout_template_exercises.length > 5" class="text-gray-500 text-sm">
+                            <div v-if="template.workout_template_exercises.length > 5" class="text-gray-500 text-xs sm:text-sm">
                                 +{{ template.workout_template_exercises.length - 5 }} autres exercices
                             </div>
                         </div>
@@ -341,7 +341,7 @@ function handleClickOutside(e) {
                     <!-- Bouton Lancer -->
                     <div class="space-x-2 text-center">
                         <button @click="launchSession(template.id)"
-                                class="bg-evogradienttop text-white px-3 py-1 rounded-thirdRounded hover:bg-blue-600 text-2xl font-bold w-28">
+                                class="bg-evogradienttop text-white px-3 py-1 rounded-thirdRounded hover:bg-blue-600 text-lg sm:text-2xl font-bold w-20 sm:w-28">
                             GO
                         </button>
                     </div>
@@ -371,13 +371,13 @@ function handleClickOutside(e) {
 
         <!-- MODAL -->
         <Teleport to="body">
-            <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-                <div class="bg-white rounded shadow-lg max-w-xl w-full p-6 relative z-50">
+            <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded shadow-lg max-w-xl w-full p-4 sm:p-6 relative z-50 max-h-[90vh] overflow-y-auto">
                     <button @click="showModal = false"
                             class="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">✕
                     </button>
 
-                    <h2 class="text-xl font-bold mb-4">Créer un Template</h2>
+                    <h2 class="text-lg sm:text-xl font-bold mb-4">Créer un Template</h2>
 
                     <form @submit.prevent="submit">
                         <!-- Nom -->
@@ -418,7 +418,7 @@ function handleClickOutside(e) {
                                     </div>
 
                                     <!-- Paramètres estimés -->
-                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2">
+                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
                                         <div>
                                             <label class="block text-xs text-gray-600 mb-1">Séries</label>
                                             <input v-model="element.estimated_sets" type="number" min="1" max="10" 

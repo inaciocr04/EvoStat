@@ -4,103 +4,135 @@ import NavLink from '@/Components/NavLink.vue';
 </script>
 
 <template>
-    <footer class="flex flex-col items-center space-y-6 py-5 justify-center border-t border-gray-100">
-        <img src="/img/evostat_grand.png" class="h-32" alt="">
-        <div class="w-full px-32 space-x-16 flex items-center justify-around">
-            <div class="bg-evogradientright h-2 w-full  rounded-full"></div>
-            <h2 class="text-3xl font-bold text-evogray w-full text-center">Rejoignez EvoStat</h2>
-            <div class="bg-evogradientleft h-2 w-full rounded-full"></div>
-        </div>
-        <div class="flex gap-9">
-            <div class="bg-evogradientright h-full w-full p-3 rounded-full text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-facebook size-6"
-                     viewBox="0 0 16 16">
-                    <path
-                        d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
-                </svg>
-            </div>
-            <div class="bg-evogradientright h-full w-full p-3 rounded-full text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-instagram size-6"
-                     viewBox="0 0 16 16">
-                    <path
-                        d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
-                </svg>
-            </div>
-            <div class="bg-evogradientright h-full w-full p-3 rounded-full text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-twitter-x size-6"
-                     viewBox="0 0 16 16">
-                    <path
-                        d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
-                </svg>
-            </div>
-            <div class="bg-evogradientright h-full w-full p-3 rounded-full text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-linkedin size-6"
-                     viewBox="0 0 16 16">
-                    <path
-                        d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
-                </svg>
+    <!-- Footer moderne et responsive -->
+    <footer class="bg-gradient-to-br from-gray-50 to-gray-100 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <!-- Section principale -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                <!-- Logo et description -->
+                <div class="lg:col-span-1 text-center lg:text-left">
+                    <div class="flex flex-col items-center lg:items-start space-y-4">
+                        <img src="/img/evostat_grand.png" class="h-20 sm:h-24 lg:h-28" alt="EvoStat Logo">
+                        <h3 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            EvoStat
+                        </h3>
+                        <p class="text-gray-600 text-sm sm:text-base max-w-md">
+                            Votre partenaire fitness pour suivre vos progrès, organiser vos séances et atteindre vos objectifs.
+                        </p>
             </div>
         </div>
-        <div class="flex">
-            <div class="space-x-3">
+
+                <!-- Navigation -->
+                <div class="lg:col-span-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <!-- Liens pour utilisateurs connectés -->
+                        <div v-if="$page.props.auth.user" class="space-y-4">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Navigation</h4>
+                            <div class="space-y-3">
                 <NavLink
-                    v-if="!$page.props.auth.user"
-                    :href="route('login')"
-                    class="text-white bg-evogradientleft py-2 px-8 rounded-2xl"
-                >
-                    Log in
+                                    :href="route('exercises.index')"
+                                    :active="route().current('exercises.*')"
+                                    class="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                                >
+                                    <span class="text-lg">💪</span>
+                                    <span>Exercices</span>
                 </NavLink>
                 <NavLink
-                    v-if="!$page.props.auth.user"
-                    :href="route('register')"
-                    class="text-white bg-evogradientleft py-2 px-8 rounded-2xl"
-                >
-                    Register
+                                    :href="route('workout-templates.index')"
+                                    :active="route().current('workout-templates.*')"
+                                    class="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors duration-200"
+                                >
+                                    <span class="text-lg">🏋️</span>
+                                    <span>Séances</span>
                 </NavLink>
-            </div>
-            <div
-                class="h-min"
-            >
+                                <NavLink
+                                    :href="route('statistics')"
+                                    :active="route().current('statistics')"
+                                    class="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors duration-200"
+                                >
+                                    <span class="text-lg">📊</span>
+                                    <span>Statistiques</span>
+                                </NavLink>
                 <NavLink
-                    v-if="$page.props.auth.user"
-                    :href="route('exercises.index')"
-                    :active="route().current('exercises.*')"
-                >
-                    Exercices
-                </NavLink>
-            </div>
-            <div
-                class="h-min"
-            >
-                <NavLink
-                    v-if="$page.props.auth.user"
-                    :href="route('workout-templates.index')"
-                    :active="route().current('workout-templates.index')"
-                >
-                    Séances
-                </NavLink>
-            </div>
-            <div
-                class="h-min"
-            >
-                <NavLink
-                    v-if="$page.props.auth.user"
-                    :href="route('profils')"
-                    :active="route().current('stats')"
-                >
-                    Statistiques
+                                    :href="route('profils')"
+                                    :active="route().current('profils')"
+                                    class="flex items-center space-x-2 text-gray-600 hover:text-orange-600 transition-colors duration-200"
+                                >
+                                    <span class="text-lg">👤</span>
+                                    <span>Profil</span>
                 </NavLink>
             </div>
-            <div
-                class="h-min"
-            >
+                        </div>
+
+                        <!-- Boutons pour utilisateurs non connectés -->
+                        <div v-if="!$page.props.auth.user" class="space-y-4">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Rejoignez-nous</h4>
+                            <div class="space-y-3">
+                                <NavLink
+                                    :href="route('login')"
+                                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                                >
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    Se connecter
+                                </NavLink>
                 <NavLink
-                    v-if="$page.props.auth.user"
-                    :href="route('profils')"
-                    :active="route().current('profils')"
+                                    :href="route('register')"
+                                    class="inline-flex items-center justify-center px-6 py-3 border-2 border-blue-500 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-all duration-200"
                 >
-                    Profils
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                                    </svg>
+                                    S'inscrire
                 </NavLink>
+            </div>
+                        </div>
+
+                        <!-- Réseaux sociaux -->
+                        <div class="space-y-4">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Suivez-nous</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="group p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full text-white hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="group p-3 bg-gradient-to-r from-pink-500 to-pink-600 rounded-full text-white hover:from-pink-600 hover:to-pink-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.746-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="group p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full text-white hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="group p-3 bg-gradient-to-r from-blue-700 to-blue-800 rounded-full text-white hover:from-blue-800 hover:to-blue-900 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Séparateur avec gradient -->
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                    <div class="text-center sm:text-left">
+                        <p class="text-sm text-gray-500">
+                            © {{ new Date().getFullYear() }} EvoStat. Tous droits réservés.
+                        </p>
+                    </div>
+                    <div class="flex space-x-6 text-sm text-gray-500">
+                        <a href="#" class="hover:text-gray-900 transition-colors duration-200">Mentions légales</a>
+                        <a href="#" class="hover:text-gray-900 transition-colors duration-200">Politique de confidentialité</a>
+                        <a href="#" class="hover:text-gray-900 transition-colors duration-200">Contact</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>

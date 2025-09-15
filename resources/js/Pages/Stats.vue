@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { Head } from '@inertiajs/vue3'
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
 import ApexCharts from 'vue3-apexcharts'
@@ -19,6 +19,9 @@ const props = defineProps({
     exercises: Array,
 })
 
+// Variable pour la largeur de fenêtre (responsive)
+const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
+
 // Formatage des nombres
 const formatNumber = (num) => {
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M'
@@ -37,27 +40,67 @@ const formatDuration = (minutes) => {
 const frequencyChartOptions = computed(() => ({
     chart: {
         type: 'line',
-        height: 300,
+        height: windowWidth.value < 640 ? 250 : 300,
         toolbar: { show: false }
     },
     stroke: {
         curve: 'smooth',
-        width: 3,
+        width: windowWidth.value < 640 ? 2 : 3,
         colors: ['#3B82F6']
     },
     xaxis: {
         categories: props.frequencyStats?.weekly?.map(w => w.date) || [],
-        labels: { rotate: -45 }
+        labels: { 
+            rotate: -45,
+            style: {
+                fontSize: windowWidth.value < 640 ? '10px' : '12px'
+            }
+        }
     },
     yaxis: {
         min: 0,
-        title: { text: 'Séances' }
+        title: { text: 'Séances' },
+        labels: {
+            style: {
+                fontSize: windowWidth.value < 640 ? '10px' : '12px'
+            }
+        }
     },
     colors: ['#3B82F6'],
     grid: {
         borderColor: '#e5e7eb',
         strokeDashArray: 3
-    }
+    },
+    responsive: [{
+        breakpoint: 640,
+        options: {
+            chart: {
+                height: 250,
+                toolbar: { show: false }
+            },
+            stroke: {
+                width: 2
+            },
+            xaxis: {
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '10px'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '10px'
+                    }
+                }
+            },
+            legend: {
+                fontSize: '10px'
+            }
+        }
+    }]
 }))
 
 const frequencySeries = computed(() => [{
@@ -68,7 +111,7 @@ const frequencySeries = computed(() => [{
 const muscleGroupChartOptions = computed(() => ({
     chart: {
         type: 'donut',
-        height: 300,
+        height: windowWidth.value < 640 ? 250 : 300,
         toolbar: { show: false }
     },
     labels: props.muscleGroupStats?.map(m => m.category) || [],
@@ -76,6 +119,7 @@ const muscleGroupChartOptions = computed(() => ({
     legend: {
         position: 'bottom',
         show: true,
+        fontSize: windowWidth.value < 640 ? '10px' : '12px',
         formatter: function(seriesName, opts) {
             const dataIndex = opts.seriesIndex
             const volume = props.muscleGroupStats?.[dataIndex]?.total_volume || 0
@@ -85,7 +129,7 @@ const muscleGroupChartOptions = computed(() => ({
     plotOptions: {
         pie: {
             donut: {
-                size: '70%'
+                size: windowWidth.value < 640 ? '60%' : '70%'
             }
         }
     },
@@ -93,13 +137,49 @@ const muscleGroupChartOptions = computed(() => ({
         enabled: false
     },
     responsive: [{
+        breakpoint: 640,
+        options: {
+            chart: {
+                height: 250,
+                width: '100%'
+            },
+            legend: {
+                position: 'bottom',
+                fontSize: '10px',
+                itemMargin: {
+                    horizontal: 5,
+                    vertical: 5
+                }
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '60%'
+                    }
+                }
+            }
+        }
+    }, {
         breakpoint: 480,
         options: {
             chart: {
-                width: 200
+                height: 200,
+                width: '100%'
             },
             legend: {
-                position: 'bottom'
+                position: 'bottom',
+                fontSize: '9px',
+                itemMargin: {
+                    horizontal: 3,
+                    vertical: 3
+                }
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '50%'
+                    }
+                }
             }
         }
     }]
@@ -178,6 +258,20 @@ const recentCards = computed(() => [
 const selectedExercise = ref('')
 const progressionSeries = ref([])
 
+// Fonction pour mettre à jour la largeur de fenêtre
+const updateWindowWidth = () => {
+    windowWidth.value = window.innerWidth
+}
+
+// Lifecycle hooks
+onMounted(() => {
+    window.addEventListener('resize', updateWindowWidth)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('resize', updateWindowWidth)
+})
+
 // Les exercices sont déjà filtrés côté serveur
 const availableExercises = computed(() => {
     return props.exercises || []
@@ -186,7 +280,7 @@ const availableExercises = computed(() => {
 // Configuration du graphique de progression
 const progressionChartOptions = computed(() => ({
     chart: {
-        height: 380,
+        height: windowWidth.value < 640 ? 300 : 380,
         type: 'line',
         animations: {
             enabled: true,
@@ -196,7 +290,7 @@ const progressionChartOptions = computed(() => ({
             dynamicAnimation: {enabled: true, speed: 300}
         },
         toolbar: {
-            show: true,
+            show: windowWidth.value >= 640,
             tools: {
                 download: true,
                 zoom: true,
@@ -214,12 +308,12 @@ const progressionChartOptions = computed(() => ({
     },
     stroke: {
         curve: 'smooth',
-        width: 3
+        width: windowWidth.value < 640 ? 2 : 3
     },
     markers: {
-        size: 7,
+        size: windowWidth.value < 640 ? 5 : 7,
         hover: {
-            size: 10,
+            size: windowWidth.value < 640 ? 8 : 10,
             sizeOffset: 3
         },
         shape: 'circle',
@@ -232,24 +326,36 @@ const progressionChartOptions = computed(() => ({
             rotate: -45,
             datetimeUTC: false,
             format: 'dd MMM HH:mm',
-            style: {fontSize: '13px', fontWeight: 'bold'}
+            style: {
+                fontSize: windowWidth.value < 640 ? '10px' : '13px', 
+                fontWeight: 'bold'
+            }
         },
         title: {
             text: 'Date',
-            style: {fontSize: '14px', fontWeight: 'bold'}
+            style: {
+                fontSize: windowWidth.value < 640 ? '12px' : '14px', 
+                fontWeight: 'bold'
+            }
         },
         tooltip: {enabled: false}
     },
     yaxis: {
         min: 0,
-        tickAmount: 6,
+        tickAmount: windowWidth.value < 640 ? 4 : 6,
         labels: {
             formatter: val => val.toFixed(1),
-            style: {fontSize: '13px', fontWeight: 'bold'}
+            style: {
+                fontSize: windowWidth.value < 640 ? '10px' : '13px', 
+                fontWeight: 'bold'
+            }
         },
         title: {
             text: 'Poids (kg)',
-            style: {fontSize: '14px', fontWeight: 'bold'}
+            style: {
+                fontSize: windowWidth.value < 640 ? '12px' : '14px', 
+                fontWeight: 'bold'
+            }
         }
     },
     tooltip: {
@@ -277,7 +383,73 @@ const progressionChartOptions = computed(() => ({
     fill: {
         type: 'solid',
         opacity: 1
-    }
+    },
+    responsive: [{
+        breakpoint: 640,
+        options: {
+            chart: {
+                height: 300,
+                toolbar: {
+                    show: false
+                }
+            },
+            stroke: {
+                width: 2
+            },
+            markers: {
+                size: 5,
+                hover: {
+                    size: 8
+                }
+            },
+            xaxis: {
+                labels: {
+                    style: {
+                        fontSize: '10px'
+                    }
+                },
+                title: {
+                    style: {
+                        fontSize: '12px'
+                    }
+                }
+            },
+            yaxis: {
+                tickAmount: 4,
+                labels: {
+                    style: {
+                        fontSize: '10px'
+                    }
+                },
+                title: {
+                    style: {
+                        fontSize: '12px'
+                    }
+                }
+            }
+        }
+    }, {
+        breakpoint: 480,
+        options: {
+            chart: {
+                height: 250
+            },
+            xaxis: {
+                labels: {
+                    style: {
+                        fontSize: '9px'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '9px'
+                    }
+                }
+            }
+        }
+    }]
 }))
 
 // Fonction pour générer des données de progression simulées
@@ -334,26 +506,26 @@ watch(() => selectedExercise.value, updateProgressionChart, {immediate: true})
 <template>
     <Head title="Statistiques" />
 
-    <div class="min-h-screen bg-white p-6">
+    <div class="min-h-screen bg-white p-4 sm:p-6">
         <div class="max-w-7xl mx-auto">
             <!-- En-tête -->
-            <div class="mb-12 text-center">
-                <h1 class="text-5xl font-bold text-gray-900 mb-4">📊 Mes Statistiques</h1>
-                <p class="text-xl text-gray-600">Suivez votre progression et vos performances</p>
-                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+            <div class="mb-8 sm:mb-12 text-center">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 sm:mb-4">📊 Mes Statistiques</h1>
+                <p class="text-lg sm:text-xl text-gray-600">Suivez votre progression et vos performances</p>
+                <div class="w-16 sm:w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-2 sm:mt-4 rounded-full"></div>
             </div>
 
             <!-- Cartes principales -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 <div v-for="card in statsCards" :key="card.title" 
-                     class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-gray-200 transition-all duration-300">
+                     class="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 hover:shadow-xl hover:border-gray-200 transition-all duration-300">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-500 mb-1">{{ card.title }}</p>
-                            <p class="text-3xl font-bold text-gray-800">{{ card.value }}</p>
+                            <p class="text-xs sm:text-sm text-gray-500 mb-1">{{ card.title }}</p>
+                            <p class="text-2xl sm:text-3xl font-bold text-gray-800">{{ card.value }}</p>
                             <p class="text-xs text-gray-400 mt-1">{{ card.subtitle }}</p>
                         </div>
-                        <div :class="[card.color, 'w-12 h-12 rounded-full flex items-center justify-center text-2xl']">
+                        <div :class="[card.color, 'w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-lg sm:text-2xl']">
                             {{ card.icon }}
                         </div>
                     </div>
@@ -361,31 +533,33 @@ watch(() => selectedExercise.value, updateProgressionChart, {immediate: true})
             </div>
 
             <!-- Statistiques récentes -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 <div v-for="card in recentCards" :key="card.title"
-                     class="bg-white rounded-xl p-4 shadow-md border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all duration-300">
+                     class="bg-white rounded-xl p-3 sm:p-4 shadow-md border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all duration-300">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-500">{{ card.title }}</p>
-                            <p class="text-xl font-bold text-gray-800">{{ card.value }}</p>
+                            <p class="text-xs sm:text-sm text-gray-500">{{ card.title }}</p>
+                            <p class="text-lg sm:text-xl font-bold text-gray-800">{{ card.value }}</p>
                         </div>
-                        <div :class="[card.color, 'w-10 h-10 rounded-full flex items-center justify-center text-lg']">
+                        <div :class="[card.color, 'w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-lg']">
                             {{ card.icon }}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
                 <!-- Graphique de fréquence -->
-                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">📈 Fréquence d'entraînement</h3>
-                    <ApexCharts
-                        type="line"
-                        :options="frequencyChartOptions"
-                        :series="frequencySeries"
-                        height="300"
-                    />
+                <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100">
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">📈 Fréquence d'entraînement</h3>
+                    <div class="chart-container">
+                        <ApexCharts
+                            type="line"
+                            :options="frequencyChartOptions"
+                            :series="frequencySeries"
+                            :height="windowWidth.value < 640 ? 250 : 300"
+                        />
+                    </div>
                     <div class="mt-4 grid grid-cols-2 gap-4">
                         <div class="text-center">
                             <p class="text-2xl font-bold text-blue-600">{{ props.frequencyStats?.averagePerWeek || 0 }}</p>
@@ -410,13 +584,14 @@ watch(() => selectedExercise.value, updateProgressionChart, {immediate: true})
                     </div>
                     
                     <div v-else>
-                        
-                        <ApexCharts
-                            type="donut"
-                            :options="muscleGroupChartOptions"
-                            :series="muscleGroupSeries"
-                            height="300"
-                        />
+                        <div class="chart-container">
+                            <ApexCharts
+                                type="donut"
+                                :options="muscleGroupChartOptions"
+                                :series="muscleGroupSeries"
+                                :height="windowWidth.value < 640 ? 250 : 300"
+                            />
+                        </div>
                         <div class="mt-4 space-y-2">
                             <div v-for="muscle in muscleGroupWithPercentages.slice(0, 5)" :key="muscle.category"
                                  class="flex justify-between items-center">
@@ -490,13 +665,15 @@ watch(() => selectedExercise.value, updateProgressionChart, {immediate: true})
                     <!-- Graphique -->
                     <div class="flex-1">
                         <div v-if="progressionSeries.length > 0">
-                            <ApexCharts
-                                type="line"
-                                :options="progressionChartOptions"
-                                :series="progressionSeries"
-                                height="380"
-                                width="100%"
-                            />
+                            <div class="chart-container">
+                                <ApexCharts
+                                    type="line"
+                                    :options="progressionChartOptions"
+                                    :series="progressionSeries"
+                                    :height="windowWidth.value < 640 ? 300 : 380"
+                                    width="100%"
+                                />
+                            </div>
                         </div>
                         <div v-else class="text-center py-12 text-gray-500">
                             <p class="text-lg mb-2">📊 Sélectionnez un exercice pour voir sa progression</p>

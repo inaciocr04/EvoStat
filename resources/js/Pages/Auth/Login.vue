@@ -37,14 +37,14 @@ const submit = () => {
         {{ status }}
     </div>
 
-    <div class="min-h-screen flex items-center justify-center bg-evogradient">
-        <div class="bg-white rounded-2xl shadow-lg p-10 w-full max-w-2xl">
-            <div class="flex flex-col items-center mb-6">
+    <div class="min-h-screen flex items-center justify-center bg-evogradient p-4">
+        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 w-full max-w-md lg:max-w-2xl">
+            <div class="flex flex-col items-center mb-4 sm:mb-6">
                 <a href="/">
-                    <img src="/img/logo_evostat.png" alt="EvoStat" class=" h-20 mb-2"/>
+                    <img src="/img/logo_evostat.png" alt="EvoStat" class="h-16 sm:h-20 mb-2"/>
                 </a>
-                <h2 class="text-2xl font-bold text-center text-gray-800">Merci d'être la</h2>
-                <p class="text-center text-gray-600">Continue ton évolution</p>
+                <h2 class="text-xl sm:text-2xl font-bold text-center text-gray-800">Merci d'être la</h2>
+                <p class="text-center text-gray-600 text-sm sm:text-base">Continue ton évolution</p>
             </div>
             <form @submit.prevent="submit">
                 <div>
@@ -87,17 +87,17 @@ const submit = () => {
                     </label>
                 </div>
 
-                <div class="mt-4 flex items-center justify-end">
+                <div class="mt-4 flex flex-col sm:flex-row items-center justify-end gap-3">
                     <Link
                         v-if="canResetPassword"
                         :href="route('password.request')"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md text-xs sm:text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Forgot your password?
                     </Link>
 
                     <PrimaryButton
-                        class="ms-4 bg-evogradient"
+                        class="w-full sm:w-auto bg-evogradient"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                     >

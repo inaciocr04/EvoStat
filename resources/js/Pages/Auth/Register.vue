@@ -89,14 +89,14 @@ onMounted(() => {
 
     <Head title="Register"/>
 
-    <div class="min-h-screen flex items-center justify-center bg-evogradient">
-        <div class="bg-white rounded-2xl shadow-lg p-10 w-full max-w-2xl">
-            <div class="flex flex-col items-center mb-6">
+    <div class="min-h-screen flex items-center justify-center bg-evogradient p-4">
+        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 lg:p-10 w-full max-w-md lg:max-w-2xl">
+            <div class="flex flex-col items-center mb-4 sm:mb-6">
                 <a href="/">
-                    <img src="/img/logo_evostat.png" alt="EvoStat" class=" h-20 mb-2"/>
+                    <img src="/img/logo_evostat.png" alt="EvoStat" class="h-16 sm:h-20 mb-2"/>
                 </a>
-                <h2 class="text-2xl font-bold text-center text-gray-800">Rejoins EvoStat</h2>
-                <p class="text-center text-gray-600">Commence ton évolution</p>
+                <h2 class="text-xl sm:text-2xl font-bold text-center text-gray-800">Rejoins EvoStat</h2>
+                <p class="text-center text-gray-600 text-sm sm:text-base">Commence ton évolution</p>
             </div>
 
             <form @submit.prevent="submit" class="space-y-4">
@@ -133,17 +133,17 @@ onMounted(() => {
                 <div class="mt-6 flex justify-center">
                     <div
                         ref="wrapper"
-                        class="p-1 rounded-secondaryRounded bg-transparent group w-1/3"
+                        class="p-1 rounded-secondaryRounded bg-transparent group w-full sm:w-1/3"
                         style="background: transparent; transition: background 0.5s ease-in-out;"
                     >
                         <button
                             ref="button"
-                            class="w-full px-6 py-3 bg-evogradientleft rounded-secondaryButtonRounded"
+                            class="w-full px-4 sm:px-6 py-2 sm:py-3 bg-evogradientleft rounded-secondaryButtonRounded"
                             style="transition: background-color 0.5s ease-in-out;"
                         >
       <span
           ref="text"
-          class="text-4xl font-bold text-white"
+          class="text-2xl sm:text-4xl font-bold text-white"
       >
         GO
       </span>

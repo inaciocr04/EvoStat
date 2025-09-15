@@ -109,33 +109,31 @@ watch(showModal, (newVal) => {
 <template>
     <Head title="Exercices"/>
 
-    <div class=" mx-auto p-6">
-        <h1 class="text-5xl font-bold text-center mb-8 text-evogray">Exercices</h1>
+    <div class="mx-auto p-4 sm:p-6">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-6 sm:mb-8 text-evogray">Exercices</h1>
 
-        <div v-if="user?.role === 'admin'" class="flex gap-4 mb-6">
+        <div v-if="user?.role === 'admin'" class="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 sm:mb-6">
             <Link :href="route('exercises.create')" class="btn-primary">+ Nouvel exercice</Link>
             <Link :href="route('muscleTargets.index')" class="btn-primary">Liste des muscles</Link>
             <Link :href="route('muscleCategories.index')" class="btn-primary">Liste des catégories</Link>
         </div>
 
-        <div v-for="category in muscleCategories" :key="category.id" class="mb-10">
-            <h2 class="text-4xl font-semibold mb-4 text-evogray">{{ category.name }}</h2>
+        <div v-for="category in muscleCategories" :key="category.id" class="mb-6 sm:mb-10">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 text-evogray">{{ category.name }}</h2>
 
             <div v-if="category.muscle_targets && category.muscle_targets.length"
-                 class="grid grid-cols-4 gap-2">
+                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                 <div
                     v-for="exercise in getUniqueExercises(category)"
                     :key="exercise.id"
-                    class="cursor-pointer border rounded-mainRounded mb-3 w-evocardwidth h-evocardheight flex flex-col items-center justify-between"
+                    class="cursor-pointer border rounded-mainRounded mb-3 w-full sm:w-evocardwidth h-evocardheight flex flex-col items-center justify-between"
                     :class="category.color ? bgClasses[category.color] : 'bg-gray-500'"
-
-
                 >
                     <div class="py-3 flex flex-col items-center justify-around h-4/5"
                          @click="openModal(exercise, category)"
                     >
-                        <h3 class="text-2xl font-bold text-evogray">{{ exercise.name }}</h3>
-                        <img src="/img/test_img_exo.png" alt="">
+                        <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-evogray">{{ exercise.name }}</h3>
+                        <img src="/img/test_img_exo.png" alt="" class="w-16 sm:w-20 h-auto">
                         <!--                    <p class="text-sm text-gray-600">{{ exercise.description || 'Aucune description' }}</p>-->
                         <div v-if="user?.role === 'admin'" class="mt-2 flex gap-2">
                             <Link :href="route('exercises.edit', exercise.id)" class="btn-edit">Modifier</Link>
@@ -179,18 +177,18 @@ watch(showModal, (newVal) => {
         </div>
     </div>
     <!-- 🌟 MODALE EXERCICE -->
-    <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
 
         <!-- Bouton croix fixé en haut à droite de l'écran -->
         <button
             @click="closeModal"
-            class="fixed top-4 right-4 text-gray-500 hover:text-black text-4xl z-[9999] cursor-pointer bg-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg"
+            class="fixed top-4 right-4 text-gray-500 hover:text-black text-2xl sm:text-4xl z-[9999] cursor-pointer bg-white rounded-full w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center shadow-lg"
         >
             ×
         </button>
 
         <div
-            class="relative h-fit bg-white border rounded-mainRounded mb-3 w-evocardfullwidth flex flex-col items-center justify-between"
+            class="relative h-fit bg-white border rounded-mainRounded mb-3 w-full max-w-sm sm:max-w-md lg:w-evocardfullwidth flex flex-col items-center justify-between max-h-[90vh] overflow-y-auto"
         >
             <!-- contenu modal, sans bouton croix ici -->
             <div
@@ -199,8 +197,8 @@ watch(showModal, (newVal) => {
             >
                 <!-- Contenu nom + image -->
                 <div class="flex flex-col justify-center items-center">
-                    <h3 class="text-2xl font-bold text-evogray">{{ selectedExerciseForModal.name }}</h3>
-                    <img src="/img/test_img_exo.png" alt="" />
+                    <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-evogray">{{ selectedExerciseForModal.name }}</h3>
+                    <img src="/img/test_img_exo.png" alt="" class="w-16 sm:w-20 h-auto" />
                 </div>
 
                 <!-- Étoile + note -->
@@ -220,44 +218,44 @@ watch(showModal, (newVal) => {
                 </div>
             </div>
 
-            <div class=" bg-white rounded-b-mainRounded w-full mb-8">
-                <div class="grid grid-cols-3 gap-6  cursor-pointer px-6 py-4">
+            <div class="bg-white rounded-b-mainRounded w-full mb-4 sm:mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 cursor-pointer px-3 sm:px-6 py-3 sm:py-4">
                     <p
                         @click="activeTab = 'explication'"
-                        :class="['rounded-thirdRounded shadow-evoShadow px-8 py-2 text-center', activeTab === 'explication' ? 'bg-evogradientleft font-bold text-white' : '']"
+                        :class="['rounded-thirdRounded shadow-evoShadow px-4 sm:px-8 py-2 text-center text-sm sm:text-base', activeTab === 'explication' ? 'bg-evogradientleft font-bold text-white' : '']"
                     >
                         Explication
                     </p>
                     <p
                         @click="activeTab = 'statistique'"
-                        :class="['rounded-thirdRounded shadow-evoShadow px-8 py-2 text-center', activeTab === 'statistique' ? 'bg-evogradientleft font-bold text-white' : '']"
+                        :class="['rounded-thirdRounded shadow-evoShadow px-4 sm:px-8 py-2 text-center text-sm sm:text-base', activeTab === 'statistique' ? 'bg-evogradientleft font-bold text-white' : '']"
                     >
                         Statistique
                     </p>
                     <p
                         @click="activeTab = 'rank'"
-                        :class="['rounded-thirdRounded shadow-evoShadow px-8 py-2 text-center', activeTab === 'rank' ? 'bg-evogradientleft font-bold text-white' : '']"
+                        :class="['rounded-thirdRounded shadow-evoShadow px-4 sm:px-8 py-2 text-center text-sm sm:text-base', activeTab === 'rank' ? 'bg-evogradientleft font-bold text-white' : '']"
                     >
                         Rank
                     </p>
                 </div>
 
                 <div>
-                    <div v-if="activeTab === 'explication'" class="px-6 py-4">
-                        <p class="text-sm text-gray-600">{{ selectedExerciseForModal.description || 'Aucune description' }}</p>
+                    <div v-if="activeTab === 'explication'" class="px-3 sm:px-6 py-3 sm:py-4">
+                        <p class="text-xs sm:text-sm text-gray-600">{{ selectedExerciseForModal.description || 'Aucune description' }}</p>
                     </div>
 
-                    <div v-if="activeTab === 'statistique'" class="px-6 py-4">
+                    <div v-if="activeTab === 'statistique'" class="px-3 sm:px-6 py-3 sm:py-4">
                         <div v-if="statsExist">
                             <!-- Ici tu mets ton graphique, par exemple un component chart -->
                             <p>Graphique des stats (placeholder)</p>
                         </div>
-                        <div v-else class="px-6 py-4">
-                            <p class="italic text-gray-500">Pas de statistiques disponibles pour cet exercice.</p>
+                        <div v-else>
+                            <p class="italic text-gray-500 text-xs sm:text-sm">Pas de statistiques disponibles pour cet exercice.</p>
                         </div>
                     </div>
 
-                    <div v-if="activeTab === 'rank'" class="bg-evogradientleft h-24 flex justify-center items-center text-4xl">
+                    <div v-if="activeTab === 'rank'" class="bg-evogradientleft h-16 sm:h-24 flex justify-center items-center text-2xl sm:text-4xl">
                         <p class="italic text-white font-bold">Coming soon</p>
                     </div>
                 </div>
