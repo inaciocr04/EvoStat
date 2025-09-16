@@ -27,7 +27,17 @@ class Exercise extends Model
 
     public function muscleTargets(): BelongsToMany
     {
-        return $this->belongsToMany(MuscleTarget::class);
+        return $this->belongsToMany(MuscleTarget::class)->withPivot('is_primary');
+    }
+
+    public function primaryMuscleTargets(): BelongsToMany
+    {
+        return $this->belongsToMany(MuscleTarget::class)->wherePivot('is_primary', true);
+    }
+
+    public function secondaryMuscleTargets(): BelongsToMany
+    {
+        return $this->belongsToMany(MuscleTarget::class)->wherePivot('is_primary', false);
     }
 
     public function sets()

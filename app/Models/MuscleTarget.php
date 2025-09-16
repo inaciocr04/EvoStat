@@ -16,6 +16,11 @@ class MuscleTarget extends Model
         return $this->belongsToMany(Exercise::class);
     }
 
+    public function primaryExercises()
+    {
+        return $this->belongsToMany(Exercise::class)->wherePivot('is_primary', true);
+    }
+
     public function muscleCategory()
     {
         return $this->belongsTo(MuscleCategory::class);

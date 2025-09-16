@@ -30,8 +30,9 @@ class UpdateExerciseRequest extends FormRequest
                 Rule::unique('exercises', 'name')->ignore($this->exercise->id),
             ],
             'description' => 'nullable|string',
-            'muscle_targets' => 'array',
-            'muscle_targets.*' => 'exists:muscle_targets,id',
+            'primary_muscle_target' => 'required|exists:muscle_targets,id',
+            'secondary_muscle_targets' => 'array',
+            'secondary_muscle_targets.*' => 'exists:muscle_targets,id',
         ];
     }
 }
