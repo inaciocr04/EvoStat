@@ -6,6 +6,7 @@ use App\Http\Controllers\HistoryAndStatsController;
 use App\Http\Controllers\ExerciseLikeController;
 use App\Http\Controllers\MuscleCategoryController;
 use App\Http\Controllers\MuscleTargetController;
+use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilsController;
 use App\Http\Controllers\SetController;
@@ -64,6 +65,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/exercises/liked', [ExerciseLikeController::class, 'getLikedExercises'])->name('api.exercises.liked');
     Route::get('/exercises/{exercise}/rating', [ExerciseRatingController::class, 'getRating']);
     Route::post('/exercises/{exercise}/rate', [ExerciseRatingController::class, 'storeOrUpdate'])->name('exercises.rate');
+    
+    // Routes pour le planning
+    Route::get('/planning', [PlanningController::class, 'index'])->name('planning.index');
+    Route::post('/planning', [PlanningController::class, 'store'])->name('planning.store');
+    Route::post('/planning/recurring', [PlanningController::class, 'createRecurringWorkouts'])->name('planning.recurring');
+    Route::post('/planning/bulk-delete', [PlanningController::class, 'bulkDelete'])->name('planning.bulk-delete');
+    Route::put('/planning/{scheduledWorkout}', [PlanningController::class, 'update'])->name('planning.update');
+    Route::delete('/planning/{scheduledWorkout}', [PlanningController::class, 'destroy'])->name('planning.destroy');
+    Route::post('/planning/{scheduledWorkout}/complete', [PlanningController::class, 'markCompleted'])->name('planning.complete');
+    Route::post('/planning/{scheduledWorkout}/skip', [PlanningController::class, 'markSkipped'])->name('planning.skip');
+    Route::post('/planning/{scheduledWorkout}/start', [PlanningController::class, 'startFromScheduled'])->name('planning.start');
     
 });
 

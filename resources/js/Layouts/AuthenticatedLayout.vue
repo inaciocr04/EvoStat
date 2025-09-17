@@ -45,6 +45,13 @@ const showingNavigationDropdown = ref(false);
                             🏋️ Séances
                         </NavLink>
                         <NavLink
+                            :href="route('planning.index')"
+                            :active="route().current('planning.*')"
+                            class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-600"
+                        >
+                            📅 Planning
+                        </NavLink>
+                        <NavLink
                             :href="route('statistics')"
                             :active="route().current('statistics')"
                             class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-purple-50 hover:text-purple-600"
@@ -152,6 +159,14 @@ const showingNavigationDropdown = ref(false);
                     >
                         <span class="text-xl">🏋️</span>
                         <span>Séances</span>
+                    </ResponsiveNavLink>
+                    <ResponsiveNavLink
+                        :href="route('planning.index')"
+                        :active="route().current('planning.*')"
+                        class="flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium hover:bg-indigo-50 hover:text-indigo-600 transition-all duration-200"
+                    >
+                        <span class="text-xl">📅</span>
+                        <span>Planning</span>
                     </ResponsiveNavLink>
                     <ResponsiveNavLink
                         :href="route('statistics')"

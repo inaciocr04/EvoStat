@@ -45,6 +45,14 @@ import NavLink from '@/Components/NavLink.vue';
                                     <span class="text-lg">🏋️</span>
                                     <span>Séances</span>
                 </NavLink>
+                <NavLink
+                                    :href="route('planning.index')"
+                                    :active="route().current('planning.*')"
+                                    class="flex items-center space-x-2 text-gray-600 hover:text-indigo-600 transition-colors duration-200"
+                                >
+                                    <span class="text-lg">📅</span>
+                                    <span>Planning</span>
+                </NavLink>
                                 <NavLink
                                     :href="route('statistics')"
                                     :active="route().current('statistics')"

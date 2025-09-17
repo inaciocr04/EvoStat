@@ -15,6 +15,11 @@ class WorkoutSession extends Model
         'total_duration',
     ];
 
+    protected $casts = [
+        'started_at' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
+
     public function workoutTemplate() {
         return $this->belongsTo(WorkoutTemplate::class);
     }
