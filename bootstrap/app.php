@@ -14,9 +14,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\SecurityHeaders::class,
         ]);
 
-        //
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'recaptcha' => \App\Http\Middleware\ValidateRecaptcha::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

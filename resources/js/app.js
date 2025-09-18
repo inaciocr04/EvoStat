@@ -7,10 +7,15 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import axios from 'axios';
 
+// Configuration CSRF pour Axios
 const csrfToken = document.querySelector('meta[name="csrf-token"]');
 if (csrfToken) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 }
+
+// Configuration des cookies pour les sessions
+axios.defaults.withCredentials = true;
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'EvoStat';

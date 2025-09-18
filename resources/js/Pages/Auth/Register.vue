@@ -124,6 +124,11 @@ onMounted(() => {
                     <TextInput v-model="form.password" placeholder="Mot de passe" type="password"/>
                     <TextInput v-model="form.password_confirmation" placeholder="Confirmation mot de passe"
                                type="password"/>
+                    
+                    <!-- CAPTCHA Google reCAPTCHA -->
+                    <div class="flex justify-center">
+                        <div v-if="$page.props.recaptchaSiteKey" class="g-recaptcha" :data-sitekey="$page.props.recaptchaSiteKey"></div>
+                    </div>
                 </div>
                 <!-- Erreurs -->
                 <div v-if="Object.keys(form.errors).length" class="text-red-500 text-sm">
