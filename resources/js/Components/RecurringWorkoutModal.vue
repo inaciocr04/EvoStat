@@ -119,30 +119,28 @@ function getPreviewDates() {
         <!-- Bouton pour ouvrir le modal -->
         <button
             @click="openModal"
-            class="inline-flex items-center justify-center px-3 sm:px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg touch-manipulation"
+            class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
         >
-            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            <span class="hidden sm:inline">Programmer récurrent</span>
-            <span class="sm:hidden">Récurrent</span>
+            Programmer récurrent
         </button>
 
         <!-- Modal pour programmer des séances récurrentes -->
-        <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
-            <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
-                <div class="p-4 sm:p-6">
-                    <div class="flex items-center justify-between mb-4 sm:mb-6">
-                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 flex items-center">
-                            <span class="text-lg sm:text-xl mr-1 sm:mr-2">🔄</span>
-                            <span class="hidden sm:inline">Programmer des séances récurrentes</span>
-                            <span class="sm:hidden">Séances récurrentes</span>
+        <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <span class="text-xl mr-2">🔄</span>
+                            Programmer des séances récurrentes
                         </h3>
                         <button
                             @click="closeModal"
-                            class="text-gray-400 hover:text-gray-600 transition-colors touch-manipulation p-1"
+                            class="text-gray-400 hover:text-gray-600 transition-colors p-1"
                         >
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
@@ -172,7 +170,7 @@ function getPreviewDates() {
                             </div>
 
                             <!-- Période -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Date de début
@@ -273,7 +271,7 @@ function getPreviewDates() {
                                     <span v-else>({{ getPreviewDates().length }} premières dates)</span>
                                 </label>
                                 <div class="bg-gray-50 rounded-lg p-4">
-                                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
+                                    <div class="grid grid-cols-3 gap-2 text-sm">
                                         <div
                                             v-for="date in getPreviewDates()"
                                             :key="date.toISOString()"
@@ -292,21 +290,20 @@ function getPreviewDates() {
                             </div>
                         </div>
 
-                        <div class="flex space-x-3 mt-4 sm:mt-6">
+                        <div class="flex space-x-3 mt-6">
                             <button
                                 type="button"
                                 @click="closeModal"
-                                class="flex-1 px-3 sm:px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors touch-manipulation"
+                                class="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                             >
                                 Annuler
                             </button>
                             <button
                                 type="submit"
                                 :disabled="form.days_of_week.length === 0"
-                                class="flex-1 px-3 sm:px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+                                class="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                <span class="hidden sm:inline">Programmer les séances</span>
-                                <span class="sm:hidden">Programmer</span>
+                                Programmer les séances
                             </button>
                         </div>
                     </form>

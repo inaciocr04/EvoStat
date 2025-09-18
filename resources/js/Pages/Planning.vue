@@ -4,8 +4,6 @@ import { Head, router } from '@inertiajs/vue3'
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
 import PlanningStats from '@/Components/PlanningStats.vue'
 import WorkoutQuickActions from '@/Components/WorkoutQuickActions.vue'
-import WorkoutHistory from '@/Components/WorkoutHistory.vue'
-import HistoryStats from '@/Components/HistoryStats.vue'
 import RecurringWorkoutModal from '@/Components/RecurringWorkoutModal.vue'
 import PlanningInfo from '@/Components/PlanningInfo.vue'
 import WorkoutSummary from '@/Components/WorkoutSummary.vue'
@@ -31,7 +29,6 @@ const selectedSession = ref(null)
 const showSummaryModal = ref(false)
 const selectedDay = ref(null)
 const showDayModal = ref(false)
-const activeTab = ref('calendar') // 'calendar' ou 'history'
 
 // Variables pour suppression en masse
 const showBulkDeleteModal = ref(false)
@@ -347,47 +344,14 @@ const scheduledWorkoutsOnly = computed(() => {
             </div>
         </div>
 
-        <!-- Onglets -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="bg-white rounded-lg shadow-sm border">
-                <div class="flex border-b border-gray-200">
-                    <button
-                        @click="activeTab = 'calendar'"
-                        :class="[
-                            'flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors touch-manipulation',
-                            activeTab === 'calendar' 
-                                ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' 
-                                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                        ]"
-                    >
-                        <span class="mr-1 sm:mr-2">📅</span>
-                        <span class="hidden sm:inline">Calendrier</span>
-                        <span class="sm:hidden">Cal.</span>
-                    </button>
-                    <button
-                        @click="activeTab = 'history'"
-                        :class="[
-                            'flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors touch-manipulation',
-                            activeTab === 'history' 
-                                ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' 
-                                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                        ]"
-                    >
-                        <span class="mr-1 sm:mr-2">📚</span>
-                        <span class="hidden sm:inline">Historique</span>
-                        <span class="sm:hidden">Hist.</span>
-                    </button>
-                </div>
-            </div>
-        </div>
 
-        <!-- Contenu des onglets -->
+        <!-- Contenu principal -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
             <!-- Info sur le planning -->
             <PlanningInfo />
             
             <!-- Calendrier -->
-            <div v-if="activeTab === 'calendar'" class="bg-white rounded-lg shadow-sm border">
+            <div class="bg-white rounded-lg shadow-sm border">
                 <!-- Navigation du calendrier -->
                 <div class="flex items-center justify-between p-3 sm:p-6 border-b">
                     <button
@@ -435,7 +399,7 @@ const scheduledWorkoutsOnly = computed(() => {
                         <div
                             v-for="day in calendarDays"
                             :key="day.date.toISOString()"
-                            class="min-h-[80px] sm:min-h-[120px] border border-gray-200 rounded-lg p-1 sm:p-2 hover:bg-gray-50 transition-colors cursor-pointer touch-manipulation"
+                            class="min-h-[80px] sm:min-h-[120px] border border-gray-200 rounded-lg p-1 sm:p-2 hover:bg-gray-50 transition-colors cursor-pointer"
                             @click="openModal(day.date)"
                         >
                             <div class="text-xs sm:text-sm font-medium text-gray-900 mb-1 sm:mb-2">
@@ -443,61 +407,55 @@ const scheduledWorkoutsOnly = computed(() => {
                             </div>
                             
                             <!-- Séances du jour -->
-                            <div class="flex justify-center items-center mt-1">
-                                <!-- Style mobile : cercle avec checkmark -->
-                                <template v-if="getDaySessions(day).length > 0">
-                                    <div
-                                        class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center cursor-pointer touch-manipulation transition-all duration-200 hover:scale-110"
-                                        :class="getDaySessions(day).some(s => s.status === 'completed') ? 'bg-green-500' : 'bg-blue-500'"
-                                        @click.stop="showDayDetails(day)"
-                                    >
-                                        <span class="text-white text-xs sm:text-sm font-bold">
-                                            {{ getDaySessions(day).some(s => s.status === 'completed') ? '✓' : '○' }}
-                                        </span>
-                                    </div>
-                                </template>
-                                
-                                <!-- Style desktop : affichage détaillé -->
-                                <template v-if="getDaySessions(day).length > 0" class="hidden sm:block">
-                                    <div class="hidden sm:block space-y-1 w-full">
+                            <div class="mt-1">
+                                <!-- Style mobile : indicateur simple -->
+                                <div v-if="getDaySessions(day).length > 0" class="block sm:hidden">
+                                    <div class="flex justify-center">
                                         <div
-                                            v-for="(session, index) in getDaySessions(day).slice(0, 1)"
-                                            :key="session.id"
-                                            class="text-xs p-1 rounded cursor-pointer hover:shadow-sm transition-shadow"
-                                            :class="session.type === 'workout' ? getStatusColor(session.status) : 'bg-green-100 text-green-800'"
-                                            @click.stop="session.type === 'workout' ? editWorkout(session) : showSessionSummary(session)"
-                                        >
-                                            <div class="flex items-center justify-between">
-                                                <span class="truncate">{{ session.name }}</span>
-                                                <span>{{ session.type === 'workout' ? getStatusIcon(session.status) : '✅' }}</span>
-                                            </div>
-                                            <div class="text-xs opacity-75">
-                                                {{ session.time }}
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Indicateur "+X" s'il y a plus de séances -->
-                                        <div
-                                            v-if="getDaySessions(day).length > 1"
-                                            class="text-xs p-1 rounded cursor-pointer hover:shadow-sm transition-shadow bg-gray-100 text-gray-600 text-center"
+                                            class="w-6 h-6 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110"
+                                            :class="getDaySessions(day).some(s => s.status === 'completed') ? 'bg-green-500' : 'bg-blue-500'"
                                             @click.stop="showDayDetails(day)"
                                         >
-                                            <div class="flex items-center justify-center">
-                                                <span>+{{ getDaySessions(day).length - 1 }}</span>
-                                            </div>
+                                            <span class="text-white text-xs font-bold">
+                                                {{ getDaySessions(day).some(s => s.status === 'completed') ? '✓' : '○' }}
+                                            </span>
                                         </div>
                                     </div>
-                                </template>
+                                </div>
+                                
+                                <!-- Style desktop : affichage détaillé -->
+                                <div v-if="getDaySessions(day).length > 0" class="hidden sm:block space-y-1 w-full">
+                                    <div
+                                        v-for="(session, index) in getDaySessions(day).slice(0, 2)"
+                                        :key="session.id"
+                                        class="text-xs p-1 rounded cursor-pointer hover:shadow-sm transition-shadow"
+                                        :class="session.type === 'workout' ? getStatusColor(session.status) : 'bg-green-100 text-green-800'"
+                                        @click.stop="session.type === 'workout' ? editWorkout(session) : showSessionSummary(session)"
+                                    >
+                                        <div class="flex items-center justify-between">
+                                            <span class="truncate">{{ session.name }}</span>
+                                            <span>{{ session.type === 'workout' ? getStatusIcon(session.status) : '✅' }}</span>
+                                        </div>
+                                        <div class="text-xs opacity-75">
+                                            {{ session.time }}
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Indicateur "+X" s'il y a plus de séances -->
+                                    <div
+                                        v-if="getDaySessions(day).length > 2"
+                                        class="text-xs p-1 rounded cursor-pointer hover:shadow-sm transition-shadow bg-gray-100 text-gray-600 text-center"
+                                        @click.stop="showDayDetails(day)"
+                                    >
+                                        <div class="flex items-center justify-center">
+                                            <span>+{{ getDaySessions(day).length - 2 }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Historique -->
-            <div v-if="activeTab === 'history'">
-                <HistoryStats :history-workouts="historyWorkouts" />
-                <WorkoutHistory :history-workouts="historyWorkouts" />
             </div>
         </div>
 
