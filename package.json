@@ -24,6 +24,7 @@
         "apexcharts": "^4.7.0",
         "chart.js": "^4.5.0",
         "chartjs-adapter-date-fns": "^3.0.0",
+        "date-fns": "^4.1.0",
         "dayjs": "^1.11.13",
         "gsap": "^3.13.0",
         "vue3-apexcharts": "^1.8.0",
